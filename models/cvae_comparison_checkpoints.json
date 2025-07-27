@@ -1,0 +1,47 @@
+{
+  "cvae": [
+    {
+      "kld": 50,
+      "ch": 64,
+      "checkpoint": "final_cvae_5_classes_ch64_kld50_base_20250722_203700_best",
+      "skip": false,
+      "name": "cvae_64_50",
+      "num_classes": 5
+    }, {
+      "kld": 50,
+      "ch": 16,
+      "checkpoint": "final_cvae_5_classes_ch16_kld50_base_20250722_072739_best",
+      "skip": false,
+      "name": "cvae_16_50",
+      "num_classes": 5
+    }, {
+      "kld": 20,
+      "ch": 64,
+      "checkpoint": "final_cvae_5_classes_ch64_kld20_base_20250722_175259_best",
+      "skip": false,
+      "name": "cvae_64_20",
+      "num_classes": 5
+    }, {
+      "kld": 20,
+      "ch": 16,
+      "checkpoint": "final_cvae_5_classes_ch16_kld20_base_20250722_022046_best",
+      "skip": false,
+      "name": "cvae_16_20",
+      "num_classes": 5
+    }, {
+      "kld": 1,
+      "ch": 64,
+      "checkpoint": "final_cvae_5_classes_ch64_kld1_base_20250722_153335_best",
+      "skip": false,
+      "name": "cvae_64_1",
+      "num_classes": 5
+    }, {
+      "kld": 1,
+      "ch": 16,
+      "checkpoint": "final_cvae_5_classes_ch16_kld1_base_20250721_212718_best",
+      "skip": false,
+      "name": "cvae_16_1",
+      "num_classes": 5
+    }
+  ]
+}

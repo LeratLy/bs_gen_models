@@ -1,0 +1,137 @@
+{
+  "bdae": [
+    {
+      "layers": 10,
+      "hidden_ch": 2048,
+      "checkpoint": "final_latent_5_cond_encoder_10_hidden2048_latentdiffusion_20250722_103549_best",
+      "latent_name": "final_latents_cond_encoder_class_spec_norm.pkl",
+      "name": "bdae_10_2048_5_cond_encoder_shift_scale",
+      "shift_target": false,
+      "scale_target_alpha": false,
+      "enc_merge_time_and_cond_embedding": true,
+      "num_classes": 5,
+      "model_conf_num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    }, {
+      "layers": 20,
+      "hidden_ch": 2048,
+      "checkpoint": "final_latent_5_cond_encoder_20_hidden2048_latentdiffusion_20250722_111037_best",
+      "latent_name": "final_latents_cond_encoder_class_spec_norm.pkl",
+      "name": "bdae_20_2048_5_cond_encoder_shift_scale",
+      "shift_target": false,
+      "scale_target_alpha": false,
+      "enc_merge_time_and_cond_embedding": true,
+      "num_classes": 5,
+      "model_conf_num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    }, {
+      "layers": 10,
+      "hidden_ch": 1024,
+      "checkpoint": "final_latent_5_cond_encoder_10_hidden1024_latentdiffusion_20250722_101709_best",
+      "latent_name": "final_latents_cond_encoder_class_spec_norm.pkl",
+      "name": "bdae_10_1024_5_cond_encoder_shift_scale",
+      "shift_target": false,
+      "scale_target_alpha": false,
+      "enc_merge_time_and_cond_embedding": true,
+      "num_classes": 5,
+      "model_conf_num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    }, {
+      "layers": 20,
+      "hidden_ch": 1024,
+      "checkpoint": "final_latent_5_cond_encoder_20_hidden1024_latentdiffusion_20250722_105113_best",
+      "latent_name": "final_latents_cond_encoder_class_spec_norm.pkl",
+      "name": "bdae_20_1024_5_cond_encoder_shift_scale",
+      "shift_target": false,
+      "scale_target_alpha": false,
+      "enc_merge_time_and_cond_embedding": true,
+      "num_classes": 5,
+      "model_conf_num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    },
+
+    {
+      "layers": 10,
+      "hidden_ch": 1024,
+      "checkpoint": "final_latent_5_cond_encoder_alpha_10_hidden1024_latentdiffusion_20250723_164546_best",
+      "latent_name": "final_latents_cond_encoder_class_spec_norm.pkl",
+      "name": "bdae_10_1024_5_cond_encoder_shift_scale_alpha",
+      "shift_target": true,
+      "scale_target_alpha": true,
+      "enc_merge_time_and_cond_embedding": true,
+      "num_classes": 5,
+      "model_conf_num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    }, {
+      "layers": 20,
+      "hidden_ch": 2048,
+      "checkpoint": "final_latent_5_cond_encoder_alpha_20_hidden2048_latentdiffusion_20250723_201237_best",
+      "latent_name": "final_latents_cond_encoder_class_spec_norm.pkl",
+      "name": "bdae_20_2048_5_cond_encoder_shift_scale_alpha",
+      "shift_target": true,
+      "scale_target_alpha": true,
+      "enc_merge_time_and_cond_embedding": true,
+      "num_classes": 5,
+      "model_conf_num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    }, {
+      "layers": 20,
+      "hidden_ch": 1024,
+      "checkpoint": "final_latent_5_cond_encoder_alpha_20_hidden1024_latentdiffusion_20250723_195439_best",
+      "latent_name": "final_latents_cond_encoder_class_spec_norm.pkl",
+      "name": "bdae_20_1024_5_cond_encoder_shift_scale_alpha",
+      "shift_target": true,
+      "scale_target_alpha": true,
+      "enc_merge_time_and_cond_embedding": true,
+      "num_classes": 5,
+      "model_conf_num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    }, {
+      "layers": 10,
+      "hidden_ch": 2048,
+      "checkpoint": "final_latent_5_cond_encoder_alpha_10_hidden2048_latentdiffusion_20250723_193451_best",
+      "latent_name": "final_latents_cond_encoder_class_spec_norm.pkl",
+      "name": "bdae_10_2048_5_cond_encoder_shift_scale_alpha",
+      "shift_target": true,
+      "scale_target_alpha": true,
+      "enc_merge_time_and_cond_embedding": true,
+      "num_classes": 5,
+      "model_conf_num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    },
+
+
+
+    {
+      "layers": 20,
+      "hidden_ch": 2048,
+      "checkpoint": "final_latent_5_cond_encoder_alpha_20_hidden2048_latentdiffusion_20250723_201237_best",
+      "latent_name": "final_latents_cond_encoder_class_spec_norm.pkl",
+      "name": "bdae_20_2048_5_cond_encoder_shift_scale_alpha_full",
+      "shift_target": true,
+      "scale_target_alpha": true,
+      "enc_merge_time_and_cond_embedding": true,
+      "num_classes": 5,
+      "model_conf_num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": false
+    }
+  ]
+}

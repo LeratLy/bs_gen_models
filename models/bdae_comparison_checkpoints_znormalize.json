@@ -1,0 +1,65 @@
+{
+  "bdae": [
+    {
+      "layers": 10,
+      "hidden_ch": 1024,
+      "checkpoint": "final_latent_5_class_norm_10_hidden1024_latentdiffusion_20250722_133859_best",
+      "latent_name": "latents_class_spec_norm.pkl",
+      "name": "bdae_10_1024_5_class_znormalize",
+      "shift_target": false,
+      "scale_target_alpha": false,
+      "num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    }, {
+      "layers": 20,
+      "hidden_ch": 1024,
+      "checkpoint": "final_latent_5_class_norm_20_hidden1024_latentdiffusion_20250722_142733_best",
+      "latent_name": "latents_class_spec_norm.pkl",
+      "name": "bdae_20_1024_5_class_znormalize",
+      "shift_target": false,
+      "scale_target_alpha": false,
+      "num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    }, {
+      "layers": 10,
+      "hidden_ch": 2048,
+      "checkpoint": "final_latent_5_class_norm_10_hidden2048_latentdiffusion_20250722_135829_best",
+      "latent_name": "latents_class_spec_norm.pkl",
+      "name": "bdae_10_2048_5_class_znormalize",
+      "shift_target": false,
+      "scale_target_alpha": false,
+      "num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    }, {
+      "layers": 20,
+      "hidden_ch": 2048,
+      "checkpoint": "final_latent_5_class_norm_20_hidden2048_latentdiffusion_20250722_151357_best",
+      "latent_name": "latents_class_spec_norm.pkl",
+      "name": "bdae_20_2048_5_class_znormalize",
+      "shift_target": false,
+      "scale_target_alpha": false,
+      "num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": true
+    }, {
+      "layers": 20,
+      "hidden_ch": 2048,
+      "checkpoint": "final_latent_5_class_norm_alpha_20_hidden2048_latentdiffusion_20250723_130417_best",
+      "latent_name": "latents_class_spec_norm.pkl",
+      "name": "bdae_20_2048_5_class_znormalize_alpha",
+      "shift_target": true,
+      "scale_target_alpha": true,
+      "num_classes": 5,
+      "latent_net_conf_num_classes": 5,
+      "class_znormalize": true,
+      "skip": false
+    }
+  ]
+}

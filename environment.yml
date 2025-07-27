@@ -1,0 +1,29 @@
+name: mec_brain
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - nibabel
+  - numpy
+  - pandas
+  - tensorboard
+  - pyvista
+  - matplotlib
+  - tqdm
+  - python-graphviz
+  - scipy
+  - scikit-learn
+  - seaborn
+  - jupyter
+  - scikit-image
+  - umap-learn
+  - pingouin
+  - pip:
+    - torch --index-url=https://download.pytorch.org/whl/cu121
+    - torchvision --index-url=https://download.pytorch.org/whl/cu121
+    - "ray[tune]"
+    - torchio
+    - openpyxl
+    - torcheval

@@ -1,0 +1,101 @@
+{
+  "cvae": [
+    {
+      "kld": 1,
+      "ch": 16,
+      "checkpoint": "final_cvae_ch16_kld1_base_20250708_214017_best",
+      "skip": false
+    },
+    {
+      "kld": 20,
+      "ch": 16,
+      "checkpoint": "final_cvae_ch16_kld20_base_20250709_032614_best",
+      "skip": false
+    },
+    {
+      "kld": 50,
+      "ch": 16,
+      "checkpoint": "final_cvae_ch16_kld50_base_20250709_112444_best",
+      "skip": false
+    },
+    {
+      "kld": 1,
+      "ch": 64,
+      "checkpoint": "final_cvae_ch64_kld1_base_20250709_012506_best",
+      "skip": false
+    },
+    {
+      "kld": 20,
+      "ch": 64,
+      "checkpoint": "final_cvae_ch64_kld20_base_20250709_084353_best",
+      "skip": false
+    },
+    {
+      "kld": 50,
+      "ch": 64,
+      "checkpoint": "final_cvae_ch64_kld50_base_20250709_161140_best",
+      "skip": false
+    }
+  ],
+  "bdae": [
+    {
+      "layers": 10,
+      "hidden_ch": 1024,
+      "checkpoint": "latent_wrs_layers10_hidden1024_lossLossType.l1_latentdiffusion_20250715_202621_best",
+      "latent_name": "latents_wrs.pkl",
+      "wrs": true,
+      "skip": false
+    }, {
+      "layers": 10,
+      "hidden_ch": 2048,
+      "checkpoint": "latent_wrs_layers10_hidden2048_lossLossType.l1_latentdiffusion_20250715_203544_best",
+      "latent_name": "latents_wrs.pkl",
+      "wrs": true,
+      "skip": false
+    }, {
+      "layers": 20,
+      "hidden_ch": 1024,
+      "checkpoint": "latent_wrs_layers20_hidden1024_lossLossType.l1_latentdiffusion_20250715_204522_best",
+      "latent_name": "latents_wrs.pkl",
+      "wrs": true,
+      "skip": false
+    }, {
+      "layers": 20,
+      "hidden_ch": 2048,
+      "checkpoint": "latent_wrs_layers20_hidden2048_lossLossType.l1_latentdiffusion_20250715_205650_best",
+      "latent_name": "latents_wrs.pkl",
+      "wrs": true,
+      "skip": false
+    },
+
+    {
+      "layers": 10,
+      "hidden_ch": 1024,
+      "checkpoint": "latent_no_wrs_layers10_hidden1024_lossLossType.l1_latentdiffusion_20250715_211646_best",
+      "latent_name": "latents_no_wrs.pkl",
+      "wrs": false,
+      "skip": false
+    }, {
+      "layers": 10,
+      "hidden_ch": 2048,
+      "checkpoint": "latent_no_wrs_layers10_hidden2048_lossLossType.l1_latentdiffusion_20250715_212717_best",
+      "latent_name": "latents_no_wrs.pkl",
+      "wrs": false,
+      "skip": false
+    }, {
+      "layers": 20,
+      "hidden_ch": 1024,
+      "checkpoint": "latent_no_wrs_layers20_hidden1024_lossLossType.l1_latentdiffusion_20250715_213803_best",
+      "latent_name": "latents_no_wrs.pkl",
+      "wrs": false,
+      "skip": false
+    }, {
+      "layers": 20,
+      "hidden_ch": 2048,
+      "checkpoint": "latent_no_wrs_layers20_hidden2048_lossLossType.l1_latentdiffusion_20250715_215055_best",
+      "latent_name": "latents_no_wrs.pkl",
+      "wrs": false,
+      "skip": false
+    }
+  ]
+}
