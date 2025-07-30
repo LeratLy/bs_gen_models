@@ -4,11 +4,11 @@
 BrainStructureModelling
 
 ## Description
-This project contains implementations of 3D Conditional Variational Autoencoders as well as Bernoulli Diffusion Autoencoders and Gaussian Autoencoders.
-Additionally, an implementation of a 3D convolutional classifier ist added.
+This project contains implementations of 3D Conditional Variational Autoencoders as well as Bernoulli Diffusion Autoencoders and Gaussian Diffusion Autoencoders.
+Additionally, an implementation of a 3D convolutional classifier ist given.
+The models have been used to generate 3 segmentation masks of the Choroid Plexus based on different MS types, but all models can be applied to other scenarios as well and can be used to generate new data and explor underlying data structures.
 
 The implementations are based on https://github.com/takimailto/BerDiff and https://github.com/phizaz/diffae.
-The models work on 3D binary segmentations masks and can be used to generate new data and explor data structure.
 
 Model structure and code will be adapted for a broader usage.
 
@@ -65,7 +65,7 @@ It is really appreciated.
 The project is licenced under the MIT license (please ifn information int the license file)
 
 ## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+As the project was tailored to a specifc use case, all functionalities might not work out of the box in a new project setup. Please be aware of thi. Modifications and tests, making it broadly applicable will folow.
 
 ## Debugging
 Duringt he project I ran into some environment issues because of version mismatches, following link helped fixing issues for me after reinstalling all dependencies:
