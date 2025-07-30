@@ -6,8 +6,7 @@ from src.utils.helpers import path_resolver
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 PLOT_DIR = os.path.join(os.path.join(os.path.dirname(os.path.abspath(__file__)), "reports"), "figures")
-# DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
-DATA_DIR = "path/to//data"
+DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 ANALYSIS_DATA_DIR = os.path.join(DATA_DIR, "analysis")
 
 DEVICE = "cuda:4"
