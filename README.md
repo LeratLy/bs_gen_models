@@ -22,8 +22,8 @@ Packages can also be manually installed via pip.
 To run the models you first have to define your base config. Previously used configs are saved in the model_templates file.
 
 Add the following to your local `.git/config` for development to avoid any problems using git and jupyter notebook:
-[filter "strip-notebook-output"]
-clean = "jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --to=notebook --stdin --stdout --log-level=ERROR"
+`[filter "strip-notebook-output"]
+clean = "jupyter nbconvert --ClearOutputPreprocessor.enabled=True --ClearMetadataPreprocessor.enabled=True --to=notebook --stdin --stdout --log-level=ERROR"`
 
 Git lfs is used for folloing file types:
 * `*.psd`
