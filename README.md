@@ -10,6 +10,8 @@ Additionally, an implementation of a 3D convolutional classifier ist added.
 The implementations are based on https://github.com/takimailto/BerDiff and https://github.com/phizaz/diffae.
 The models work on 3D binary segmentations masks and can be used to generate new data and explor data structure.
 
+Model structure and code will be adapted for a broader usage.
+
 ## Visuals
 Visuals with generated examples based on an open dataset will come soon.
 
@@ -46,7 +48,7 @@ The project is mainly based on the implementations of https://github.com/takimai
 It is really appreciated.
 
 ## License
-For open source projects, say how it is licensed.
+The project is licenced under the MIT license (please ifn information int the license file)
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
