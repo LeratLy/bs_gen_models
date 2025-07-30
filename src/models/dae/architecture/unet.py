@@ -1,3 +1,12 @@
+# Copyright (C) 2024 LeratLy - All Rights Reserved
+#   You may use, distribute and modify this code under the
+#   terms of the MIT license.
+#   You should have received a copy of the MIT license with
+#   this file.
+
+#   Copyright (c) 2021 VISTEC - Vidyasirimedhi Institute of Science and Technology.
+#   Code of VISTEC has been used and modified in this file under terms of the MIT license.
+        
 from dataclasses import dataclass, field
 from typing import NamedTuple, Tuple, Optional
 
