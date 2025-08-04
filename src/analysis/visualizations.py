@@ -10,6 +10,10 @@ from src.utils.helpers import get_filenames_by
 from src.utils.visualisation import plot_3d_data_cloud
 from variables import DATA_DIR
 
+"""
+Visualization for plotting results to PLOT_DIR
+"""
+
 
 def plot_all_of_folder(folder_name):
     """
@@ -27,9 +31,9 @@ def plot_reduced_clusters(tsne_result, labels: np.array, base_path: str = None, 
                           colors: list[str] = None, classes: list[str] = None, markers: list[str] = None):
     """
     Plot results of t-SNE and save them to a svg
-    :param markers:
-    :param colors:
-    :param classes:
+    :param markers: markers used for different classes
+    :param colors: colors used for different classes
+    :param classes: classes which should be visually seperated
     :param file_name: resulting svg file name
     :param tsne_result: results that should be plotted
     :param labels: labels per data point (name)

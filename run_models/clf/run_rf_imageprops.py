@@ -11,10 +11,12 @@ from src._types import Mode
 from src.data.dataloader import get_dataloader
 from src.data.datasets import load_tensor_dict_dataset
 from src.analysis.shape_metrics import extract_features
+
 """
 This has been an alternative approach to fit a classifier based on geometric properties with random forest, 
 an alternative could also be fitting a support vector machine
 """
+
 
 def infer(dataloaders: dict[Mode, DataLoader]):
     """
@@ -43,6 +45,7 @@ def infer(dataloaders: dict[Mode, DataLoader]):
 
 def infer_whole_dataset(dataloader):
     """
+    Infer image props for all data in the given datalaoder
     """
     feature_tensor = torch.tensor([])
     id_tensor = torch.tensor([])
@@ -59,11 +62,15 @@ def infer_whole_dataset(dataloader):
 
 
 def get_data(dataloader):
+    """
+    Read features, targets and id from given datalaoder
+    """
     features, targets, ids = zip(*list(iter(dataloader)))
     features = np.stack([np.array(f).squeeze() for f in features])
     targets = np.array([np.array(t).squeeze() for t in targets])
     ids = np.array([np.array(i).squeeze() for i in ids])
     return features, targets, ids
+
 
 if __name__ == "__main__":
     os.environ["CUDA_VISIBLE_DEVICES"] = "4,5"

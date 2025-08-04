@@ -14,6 +14,8 @@ from src.analysis.utils import npz_dataloader
 """
 A collection of 3D shape metrics that are used to analyse generated 3D choroid plexus shapes
 """
+
+
 #
 # def approx_3d_curvature(skeleton, k:int = 5):
 #     """
@@ -25,16 +27,24 @@ A collection of 3D shape metrics that are used to analyse generated 3D choroid p
 #     curvatures = []
 #     nbrs  = NearestNeighbors(n_neighbors=k).fit(skeleton)
 #     distances, indices = nbrs.kneighbors(skeleton)
-#     always take 3 points and lay circumcircle around it (but not making sence if no proper lin but hey maybe still acurate (display skelton before)
+#     always take 3 points and lay circumcircle around it (but not making sence if no proper line but hey maybe still acurate (display skelton before)
 #     return np.array(curvatures)
 
 def approx_medial_axis_length(mask):
+    """
+    Approximate medial axis length as skeleton of given shape
+    """
     skeleton = skeletonize(mask, method="lee")
     # plot_3d_data_cloud(skeleton.astype(int), "Skeleton", SaveTo.png, "x", "y", "z")
     return np_volume(skeleton)
 
+
 def np_volume(np_array):
+    """
+    Volume of given shape
+    """
     return np.count_nonzero(np_array)
+
 
 def surface_area(mask):
     """
@@ -49,7 +59,7 @@ def surface_area(mask):
     # mesh = Poly3DCollection(verts[faces])
     # mesh.set_edgecolor('k')
     # ax.add_collection3d(mesh)
-    # plt.savefig(f"test.png")
+    # plt.savefig(os.path.join(PLOT_DIR, "surface_area.png"))
     return areas
 
 
@@ -62,8 +72,8 @@ def volume(mask: torch.Tensor):
 
 def aspect_ratio(minor_ax_length, major_ax_length):
     """
-    :param minor_ax_length:
-    :param major_ax_length:
+    :param minor_ax_length: length of minor axis of ellipse surrounding the shape
+    :param major_ax_length: length of major axis of ellipse surrounding the shape
     :return: Ratio of the major axis to the minor axis (of ellipse along eigenvectors)
     """
     return major_ax_length / minor_ax_length
@@ -108,7 +118,8 @@ def extract_feature_table(np_array):
     solidity,
     minor_axis_length,
     aspect_ratio,
-    surface_area
+    surface_area,
+    hull_volume_ratio
 
     :param np_array: array without channel and batch dimensions
     :type np_array: torch.Tensor (dtype int)
@@ -145,7 +156,9 @@ def extract_features(mask_tensor):
     return torch.tensor(torch.concatenate([torch.tensor(v.flatten()) for v in regions.values()]),
                         device=mask_tensor.device)
 
-def geometrics_for_folder(path: Union[str, list[str]], threshold: int = 0.5, file_name: str = "samples.npz", save_path:str = None):
+
+def geometrics_for_folder(path: Union[str, list[str]], threshold: int = 0.5, file_name: str = "samples.npz",
+                          save_path: str = None):
     """
     Read samples.npz file from given path and extract geometric features or corresponding arrays
     :param file_name:
@@ -154,7 +167,8 @@ def geometrics_for_folder(path: Union[str, list[str]], threshold: int = 0.5, fil
     :type path: str
     :return:
     """
-    assert save_path is not None or isinstance(path, str), "either save_path or path must be string, indicating, where to save csv to"
+    assert save_path is not None or isinstance(path,
+                                               str), "either save_path or path must be string, indicating, where to save csv to"
     if save_path is None:
         save_path = path
     if isinstance(path, list):
@@ -165,13 +179,15 @@ def geometrics_for_folder(path: Union[str, list[str]], threshold: int = 0.5, fil
     rows = []
     print(f"Start extracting geometric features for {file_paths}...")
     for i, (features, targets, ids) in tqdm(enumerate(dataloader)):
-        feature_table = compute_metrics_for_sample(features, ids, targets, dataloader.dataset.initial_labels[ids.item()])
+        feature_table = compute_metrics_for_sample(features, ids, targets,
+                                                   dataloader.dataset.initial_labels[ids.item()])
         if feature_table is not None:
             rows.append(feature_table)
     print("Done extracting geometric features.")
 
     df = pd.DataFrame(rows).set_index("idx")
     save_geometric_data_to_file(df, save_path)
+
 
 def save_geometric_data_to_file(df: pd.DataFrame, save_path: str, file_prefix: str = ""):
     """
@@ -190,7 +206,8 @@ def save_geometric_data_to_file(df: pd.DataFrame, save_path: str, file_prefix: s
     print(f"Saved features to {os.path.join(save_path, file_prefix + "geometric_features.csv")}")
 
 
-def compute_metrics_for_sample(features, ids=None, targets=None, initial_labels=None, threshold=0.5, raw_features: bool = False):
+def compute_metrics_for_sample(features, ids=None, targets=None, initial_labels=None, threshold=0.5,
+                               raw_features: bool = False):
     """
     Extract geometric features for a given sample
     :param features:
