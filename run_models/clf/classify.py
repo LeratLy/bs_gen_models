@@ -6,7 +6,7 @@ import torch
 from src import MSClfNet, MSClfNetConfig
 from src._types import Mode, DataType
 from src.data.dataloader import get_dataloader
-from variables import ROOT_DIR, DATA_DIR
+from variables import ROOT_DIR, DATA_DIR, DEVICE, MODEL_DIR
 
 
 def load_model(checkpoint_path: str):
@@ -30,20 +30,20 @@ def load_model(checkpoint_path: str):
 if __name__ == '__main__':
     main_path = ROOT_DIR
     data_path = DATA_DIR
+    device = DEVICE
     data_splits = {
         Mode.train: os.path.join(data_path, "train_split_nii.csv")
     }
     dataloaders = get_dataloader(
         data_path, 5, False, DataType.nii, False, data_splits, do_normalize_gaussian=False, img_size=96, dims=3
     )
-    model = load_model("path/to//data/checkpoints_final_clf/clf_2_classes_min_lr0.0001_outnum64_hiddenl3_hiddench32_f1_base_20250616_143248_best")
-    device = "cuda:4"
+    model = load_model(os.path.join(MODEL_DIR, "clf_2_classes_min_lr0.0001_outnum64_hiddenl3_hiddench32_f1_base_20250616_143248_best"))
     model.to(device)
     model.eval()
     preds = []
     probs = []
     for i, (features, targets, ids) in enumerate(dataloaders[Mode.train]):
-        x = model(features.to("cuda:4", dtype=torch.float32))
+        x = model(features.to(DEVICE, dtype=torch.float32))
         pred = torch.softmax(x, dim=1)
         prob = torch.argmax(pred, dim=1)
         preds.append(pred.detach().cpu())

@@ -10,13 +10,12 @@ from src._types import LossType, DataType
 from src.config import TorchInstanceConfig
 from src.k_fold import run_k_fold
 from ray import tune as ray_tune
-from variables import MS_MAIN_TYPE, DATA_DIR
+from variables import MS_MAIN_TYPE, DATA_DIR, DEVICE, ROOT_DIR
 
 os.environ["CUDA_VISIBLE_DEVICES"] = "4"
 os.environ["OMP_NUM_THREADS"] = "4"
 os.environ["MKL_NUM_THREADS"] = "4"
 os.environ["NUMEXPR_NUM_THREADS"] = "4"
-
 
 def main(config):
     result = tune.run(
@@ -91,12 +90,12 @@ def setup_conf():
     conf.accum_batches = 1
     conf.loss_type_eval = LossType.m_if1
     conf.loss_kwargs_eval = {"num_classes": conf.num_classes}
-    conf.device = "cuda"
+    conf.device = DEVICE
     conf.log_interval = 30
     # conf.data_parallel = True
-    conf.checkpoint['dir'] = os.path.join(DATA_DIR, "checkpoints_k_fold_clf")
-    conf.logging_dir = os.path.join(DATA_DIR, "logging_k_fold_clf")
-    conf.run_dir = os.path.join(DATA_DIR, "runs_k_fold_clf")
+    conf.checkpoint['dir'] = os.path.join(ROOT_DIR, "checkpoints")
+    conf.logging_dir = os.path.join(ROOT_DIR, "logging")
+    conf.run_dir = os.path.join(ROOT_DIR, "runs")
     conf.scheduler = TorchInstanceConfig(
         instance_type="torch.optim.lr_scheduler.ReduceLROnPlateau",
         settings=['min', 0.5, 10, 0.0001, 'rel', 0, 1e-8]
@@ -108,7 +107,7 @@ if __name__ == "__main__":
     config = {
         "lr": tune.grid_search([1e-3]),
         "num_hidden_layers": tune.grid_search([3]),
-        "hidden_ch": tune.grid_search([64]), # 32, 64
+        "hidden_ch": tune.grid_search([64]),
         "preprocess_img": tune.grid_search(["crop"]),
         "random_sample": tune.grid_search([True]),
         "out_num": tune.grid_search([0]),

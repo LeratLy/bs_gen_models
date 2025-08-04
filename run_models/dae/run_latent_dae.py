@@ -8,7 +8,7 @@ from run_models.model_templates import assign_model_config, chp96_diffae_latent_
 from src._types import LossType, ModelName, GenerativeType, NoiseType, Activation
 from src.config import ClfConfig, TorchInstanceConfig
 from src.models.trainer import Trainer
-from variables import DATA_DIR
+from variables import DATA_DIR, MODEL_DIR
 
 def main(config):
     conf = get_base_config_latent()
@@ -25,12 +25,7 @@ def main(config):
 
     # latent_diffusion conf id for cond
     conf.latent_diffusion_conf.loss_type = config["loss_type"]
-    # conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "diffae_wrts_base_20250712_220934_best")
-    conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "tune_xor_base_20250710_215919_best")
-    # conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "diffae_cond_encoder_base_20250712_220934_best_base_20250720_093034_best")
-    # conf.name = f"latent_no_wrs_class_spec_norm_layers_add_target_shift_{conf.model_conf.latent_net_conf.num_layers}_hidden{conf.model_conf.latent_net_conf.num_hid_channels}_loss{conf.latent_diffusion_conf.loss_type}"
-    # conf.name = f"latent_5_class_{conf.model_conf.latent_net_conf.num_layers}_hidden{conf.model_conf.latent_net_conf.num_hid_channels}_loss{conf.latent_diffusion_conf.loss_type}"
-    # conf.name = f"latent_5_shift{conf.model_conf.latent_net_conf.num_layers}_hidden{conf.model_conf.latent_net_conf.num_hid_channels}_loss{conf.latent_diffusion_conf.loss_type}"
+    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_best")
     conf.name = f"latent_5_alpha_{conf.model_conf.latent_net_conf.num_layers}_hidden{conf.model_conf.latent_net_conf.num_hid_channels}_loss{conf.latent_diffusion_conf.loss_type}"
     conf.latent_infer_path = config["latent_infer_path"]
     conf.create_checkpoint = False
@@ -77,7 +72,7 @@ def get_base_config_latent():
         settings=['min', 0.5, 40, 0.0001, 'rel', 0, 1e-8]
     )
     conf.clf_conf = ClfConfig(
-        "path/to//data/final_models/checkpoints/analysis_final_ms_clf_base_20250711_101044_best",
+        os.path.join(MODEL_DIR, "analysis_final_ms_clf_base_20250711_101044_best"),
         ModelName.ms_clf,
         get_chP96_clf_2cond_conf(),
     )
@@ -110,21 +105,11 @@ if __name__ == "__main__":
     conf.model_conf.net.ch_mult = (1, 2, 2, 4)
     conf.model_conf.net.ch = 32
     conf.dropout = 0.1
-    # conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "diffae_wrts_base_20250712_220934_best")
-    # latent_infer_path = os.path.join(DATA_DIR, "final_models", "checkpoints", "latents_wrs.pkl")
-    #
-    # conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "tune_xor_base_20250710_215919_best")
-    # latent_infer_path = os.path.join(DATA_DIR, "final_models", "checkpoints", "latents_no_wrs.pkl")
-
-    # conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "diffae_wrts_base_20250712_220934_best")
-    # conf.data["name"] = "chP3D_tune_5_classes_70"
-    #
     conf.model_conf.num_classes = 5
     conf.num_classes = 5
-    conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "tune_xor_base_20250710_215919_plus_dropout_cond_encoder")
+    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_plus_dropout_cond_encoder")
     conf.data["name"] = "chP3D_tune_5_classes_70"
-    # latent_infer_path = os.path.join(DATA_DIR, "final_models", "checkpoints", "latents_class_spec_norm.pkl")
-    latent_infer_path = os.path.join(DATA_DIR, "final_models", "checkpoints", "final_latents_cond_encoder_class_spec_norm.pkl")
+    latent_infer_path = os.path.join(MODEL_DIR, "final_latents_cond_encoder_class_spec_norm.pkl")
     conf.__post_init__()
     trainer = Trainer(conf)
     trainer.infer_latents(save_path=latent_infer_path)
@@ -132,8 +117,8 @@ if __name__ == "__main__":
 
     # 2. tune
     config = {
-        "num_layers": 10,  # 10, 20
-        "num_hid_channels": 2048,  # 1024, 2048
+        "num_layers": 10,
+        "num_hid_channels": 2048,
         "loss_type":LossType.l1,
         "latent_infer_path": latent_infer_path,
     }

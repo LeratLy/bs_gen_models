@@ -15,7 +15,7 @@ from run_models.dae.tune_hyperparams import get_base_config
 from run_models.dae.tune_hyperparams_latent import get_base_config_latent
 from src._types import GenerativeType, LossType, ModelGradType, Activation, NoiseType
 from src.models.trainer import Trainer
-from variables import DATA_DIR, MS_TYPES
+from variables import DATA_DIR, MS_TYPES, MODEL_DIR, ROOT_DIR
 
 
 def run_latent_sample():
@@ -112,33 +112,19 @@ def run_sample_base():
     conf.checkpoint["resume_optimizer"] = False
     conf.ema_decay = 0.9
 
-    # def lr_lambda(epoch):
-    #     # return max(0.99 ** epoch, 1e-5 / conf.lr)
-    #     return max(0.9 ** epoch, 1e-4 / conf.lr)
-    #
-    # conf.scheduler = TorchInstanceConfig(
-    #     instance_type="torch.optim.lr_scheduler.LambdaLR",
-    #     settings=[lr_lambda]
-    # )
-    conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "bdae_class_norm", "tune_xor_base_20250710_215919_plus_dropout_base_20250721_130617_best")
-    conf.checkpoint['dir'] = os.path.join(DATA_DIR, "final_models", "checkpoints")
-    conf.logging_dir = os.path.join(DATA_DIR, "final_models", "logging")
-    conf.run_dir = os.path.join(DATA_DIR, "final_models", "runs")
+    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_plus_dropout_base_20250721_130617_best")
+    conf.checkpoint['dir'] = os.path.join(ROOT_DIR, "checkpoints")
+    conf.logging_dir = os.path.join(ROOT_DIR, "logging")
+    conf.run_dir = os.path.join(ROOT_DIR, "runs")
     conf.name= "test"
     conf.patience = 20
-    # conf.model_conf.enc_merge_time_and_cond_embedding = True
     conf.dropout = 0.1
-    # conf.model_conf.num_classes = 5
     conf.num_classes = 5
     conf.__post_init__()
     conf.eval.eval_training_every_epoch = -1
 
     trainer = Trainer(conf)
     trainer.train()
-    # features, targets, id = next(iter(trainer.dataloaders.get(Mode.val)))
-    # features = features.to(conf.device).type(conf.dtype)
-    # targets = targets.to(conf.device)
-    # trainer.get_wrapper_model().create_samples_for_images(features, targets, 2, 2)
     trainer.close()
 
 if __name__ == "__main__":

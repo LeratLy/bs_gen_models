@@ -10,10 +10,7 @@ from run_models.model_templates import assign_model_config, chp96_diffae_latent_
 from src._types import LossType, ModelName, GenerativeType, NoiseType, Activation
 from src.config import ClfConfig, TorchInstanceConfig
 from src.models.trainer import Trainer
-from variables import DATA_DIR
-
-
-# os.environ["CUDA_VISIBLE_DEVICES"]="4"
+from variables import DATA_DIR, MODEL_DIR
 
 
 def main(config):
@@ -78,22 +75,21 @@ def get_base_config_latent():
     conf.create_checkpoint = True
     conf.eval.eval_training_every_epoch = 100
     conf.eval.eval_epoch_metrics_val_samples = False
-    conf.checkpoint['dir'] = os.path.join(DATA_DIR, "final_models", "checkpoints")
-    conf.logging_dir = os.path.join(DATA_DIR, "final_models", "logging")
-    conf.run_dir = os.path.join(DATA_DIR, "final_models", "runs")
+    conf.checkpoint['dir'] = os.path.join(ROOT_DIR, "checkpoints")
+    conf.logging_dir = os.path.join(ROOT_DIR, "logging")
+    conf.run_dir = os.path.join(ROOT_DIR, "runs")
     conf.eval.num_samples = 2
     conf.eval.num_evals = 10
     conf.eval.num_reconstructions = 2
     conf.clip_denoised = True
     assign_model_config(conf)
 
-
     conf.scheduler = TorchInstanceConfig(
         instance_type="torch.optim.lr_scheduler.ReduceLROnPlateau",
         settings=['min', 0.5, 40, 0.0001, 'rel', 0, 1e-8]
     )
     conf.clf_conf = ClfConfig(
-        "path/to//data/final_models/checkpoints/analysis_final_ms_clf_base_20250711_101044_best",
+        os.path.join(MODEL_DIR, "analysis_final_ms_clf_base_20250711_101044_best"),
         ModelName.ms_clf,
         get_chP96_clf_2cond_conf(),
     )
@@ -113,25 +109,29 @@ def get_base_config_latent():
     conf.diffusion_conf.loss_type = LossType.bce
     return conf
 
+
 def cond_encoder_shift_scale(conf):
     conf.model_conf.num_classes = 5
     conf.num_classes = 5
     conf.model_conf.enc_merge_time_and_cond_embedding = True
-    conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "cond_encoder_shift_scale", "tune_xor_base_20250710_215919_plus_dropout_cond_encoder_base_20250721_231432_best")
+    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_plus_dropout_cond_encoder_base_20250721_231432_best")
     return conf
+
 
 def cond_encoder_scale(conf):
     conf.model_conf.num_classes = 5
     conf.num_classes = 5
     conf.model_conf.enc_merge_time_and_cond_embedding = False
-    conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "cond_encoder_scale", "tune_xor_base_20250710_215919_plus_dropout_cond_encoder_scale_only_base_20250722_220005_best")
+    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_plus_dropout_cond_encoder_scale_only_base_20250722_220005_best")
     return conf
+
 
 def base_model(conf):
     conf.model_conf.num_classes = None
     conf.model_conf.enc_merge_time_and_cond_embedding = False
-    conf.checkpoint["name"] = os.path.join(DATA_DIR, "final_models", "checkpoints", "bdae_class_norm", "tune_xor_base_20250710_215919_plus_dropout_base_20250721_130617_best")
+    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_plus_dropout_base_20250721_130617_best")
     return conf
+
 
 if __name__ == "__main__":
     os.environ["CUDA_VISIBLE_DEVICES"] = "4"
@@ -154,7 +154,7 @@ if __name__ == "__main__":
 
     # conf.data["name"] = "chP3D_tune_5_classes_70"
     # -- only for cond encoder --
-    latent_infer_path = os.path.join(DATA_DIR, "final_models", "checkpoints", "cond_encoder_shift_scale", "final_latents_cond_encoder_class_spec_norm.pkl")
+    latent_infer_path = os.path.join(MODEL_DIR, "final_latents_cond_encoder_class_spec_norm.pkl")
 
     # conf = cond_encoder_scale(conf)
     # latent_infer_path = os.path.join(DATA_DIR, "final_models", "checkpoints", "cond_encoder_scale", "final_latents_cond_encoder_scale_class_spec_norm.pkl")
@@ -165,7 +165,6 @@ if __name__ == "__main__":
     # trainer = Trainer(conf)
     # trainer.infer_latents(save_path=latent_infer_path)
     # trainer.close()
-
 
     # 2. tune
     config = {

@@ -7,11 +7,7 @@ from run_models.model_templates import assign_model_config
 from src._types import ModelGradType, LossType, DataType, ModelName, NoiseType, GenerativeType, Activation
 from src.config import BaseConfig, TorchInstanceConfig
 from src.models.trainer import Trainer
-from variables import MS_MAIN_TYPE, DATA_DIR
-
-
-# os.environ["CUDA_VISIBLE_DEVICES"]="4"
-
+from variables import MS_MAIN_TYPE, DATA_DIR, ROOT_DIR
 
 def main(config, model_type="gaussian"):
     result = tune.run(
@@ -24,11 +20,6 @@ def main(config, model_type="gaussian"):
     print(f"Best trial config: {best_trial.config}")
     print(f"Best trial final validation loss: {best_trial.last_result['loss']}")
     print(f"Best trial final validation accuracy: {best_trial.last_result['reconstruction_loss']}")
-
-    # best_trial = result.get_best_trial("reconstruction_loss", "min", "last")
-    # print(f"Best trial config: {best_trial.config}")
-    # print(f"Best trial final validation loss: {best_trial.last_result['loss']}")
-    # print(f"Best trial final validation accuracy: {best_trial.last_result['reconstruction_loss']}")
     result.dataframe().to_csv("all_trials.csv")
 
 
@@ -55,15 +46,6 @@ def train_diffae(config, model_type="gaussian"):
         conf.diffusion_conf.noise_type = NoiseType.gaussian
         conf.diffusion_conf.loss_type = config["loss_type"]
     conf.ema_decay = 0.9
-
-    # def lr_lambda(epoch):
-    #     # return max(0.99 ** epoch, 1e-5 / conf.lr)
-    #     return max(0.9 ** epoch, config["min_lr"] / conf.lr)
-    #
-    # conf.scheduler = TorchInstanceConfig(
-    #     instance_type="torch.optim.lr_scheduler.LambdaLR",
-    #     settings=[lr_lambda]
-    # )
     conf.name = f"diffae_wrts"
     conf.__post_init__()
 
@@ -91,11 +73,9 @@ def get_base_config():
 
     conf.create_checkpoint = True
     conf.checkpoint["save_every_epoch"] = -1
-    # conf.checkpoint["resume_scheduler"] = False
-    # conf.checkpoint["name"] = os.path.join(DATA_DIR, "last_tuning_round", "checkpoints_last_dae", "tune_xor_base_20250708_082139_best")
-    conf.checkpoint['dir'] = os.path.join(DATA_DIR, "checkpoints_last_dae")
-    conf.logging_dir = os.path.join(DATA_DIR, "logging_last_dae")
-    conf.run_dir = os.path.join(DATA_DIR, "runs_last_dae")
+    conf.checkpoint['dir'] = os.path.join(ROOT_DIR, "checkpoints")
+    conf.logging_dir = os.path.join(ROOT_DIR, "logging")
+    conf.run_dir = os.path.join(ROOT_DIR, "runs")
     conf.model_name = ModelName.beatgans_autoencoder
     conf.model = "src.models.dae.architecture.unet_autoencoder.BeatGANsAutoencoderModel"
     conf.add_running_metrics = ["reconstruction"]
@@ -127,11 +107,6 @@ def get_base_config():
         instance_type="torch.optim.lr_scheduler.ReduceLROnPlateau",
         settings=['min', 0.5, 10, 0.0001, 'rel', 0, 1e-8]
     )
-    # conf.clf_conf = ClfConfig(
-    #     "path/to//data/checkpoints_clf_last/clf_2_classes_min_lr0.0001_hiddenl3_hiddench64_out_num0_randomSamplingTruef1_maxpool_base_20250627_234320_best",
-    #     ModelName.ms_clf,
-    #     get_chP96_clf_2cond_conf(),
-    # )
     return conf
 
 
@@ -144,23 +119,14 @@ if __name__ == "__main__":
     config_xor = {
         "ch": tune.grid_search([32]),
         "ch_mult": tune.grid_search([
-            # {
-            #     "enc_channel_mult": (1, 2, 4, 8, 8),
-            #     "ch_mult": (1, 2, 4, 8)
-            # },
             {
                 "enc_channel_mult": (1, 2, 2, 4, 4),
                 "ch_mult": (1, 2, 2, 4)
             },
-            # {
-            #     "enc_channel_mult": (1, 2, 4, 8, 8, 8),
-            #     "ch_mult": (1, 2, 4, 8, 8)
-            # }
         ]),
     }
     config_gaussian = {
         **config_xor,
         "loss_type": tune.choice([LossType.l1, LossType.mse]),
     }
-    # main(config_gaussian)
     main(config_xor, model_type="xor")
