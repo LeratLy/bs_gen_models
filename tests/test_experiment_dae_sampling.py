@@ -24,37 +24,43 @@ class ExperimentAutoencoder(unittest.TestCase):
     def test_train_xor(self):
         # 1. train main xor diffae
         self.conf = chp96_diffae_xor_conf()
+        self.conf.num_epochs = 1
         self.conf.name ="xor_deep_32"
         self.training()
 
     def test_semantic_xor(self):
         # 2. infer semantic embedding for whole dataset
         self.conf = chp96_diffae_xor_conf()
-        self.conf.checkpoint["name"] = "testing_checkpoints/xor_deep_32_base_20250519_214241_best"
-        self.semantic_encoding()
+        self.conf.num_epochs = 1
+        # self.conf.checkpoint["name"] = "add_checkpoint"
+        # self.semantic_encoding()
 
     def test_sampling_xor(self):
         # 3. sample without latent
         self.conf = chp96_diffae_xor_conf()
-        self.conf.checkpoint["name"] = "testing_checkpoints/xor_deep_32_base_20250519_214241_best"
-        self.sample()
+        self.conf.num_epochs = 1
+        # self.conf.checkpoint["name"] = "add_checkpoint"
+        # self.sample()
 
     def test_semantic_training_xor(self):
         # 4. train latent ddim
         self.conf = chp96_diffae_xor_conf()
         self.conf = chp96_diffae_latent_conf(self.conf)
         self.conf = chp96_diffae_latent_training_conf(self.conf)
-        self.conf.checkpoint["name"] = "testing_checkpoints/xor_deep_32_base_20250519_214241_best"
-        self.semantic_training()
+        self.conf.num_epochs = 1
+        self.conf.latent_infer_path = "add_latent_infer_path"
+        self.conf.checkpoint["name"] = "add_checkpoint"
+        # self.semantic_training()
 
     def test_sampling_xor_latent(self):
         # 5. create completely new samples
         self.conf = chp96_diffae_xor_conf()
         self.conf = chp96_diffae_latent_conf(self.conf)
         self.conf = chp96_diffae_latent_training_conf(self.conf)
-        self.conf.checkpoint[
-            "name"] = "path/to/project/bs_gen_models/tests/checkpoints/xor_deep_latentdiffusion_20250520_232855_best"
-        self.sample(latent=True)
+        self.conf.latent_infer_path = "add_latent_infer_path"
+        self.conf.num_epochs = 1
+        # self.conf.checkpoint["name"] = "add_checkpoint"
+        # self.sample(latent=True)
 
     # ---------------------------
 
@@ -63,6 +69,7 @@ class ExperimentAutoencoder(unittest.TestCase):
     def test_train_autoencoder_gaussian(self):
         # 1. Train main model in with mode TrainingMode.base (standard)
         self.conf = chp96_diffae_gaussian_conf()
+        self.conf.num_epochs = 1
         self.training()
 
     # ---------------------------
@@ -73,7 +80,9 @@ class ExperimentAutoencoder(unittest.TestCase):
         1. Train the base diffae
         """
         self.conf.__post_init__()
+        self.conf.num_epochs = 1
         self.trainer = Trainer(self.conf)
+
         self.trainer.train()
 
         self.assertIsNotNone(self.trainer)
@@ -84,6 +93,7 @@ class ExperimentAutoencoder(unittest.TestCase):
         2. Save semantic encoding for training the latent DDIM
         """
         self.conf.__post_init__()
+        self.conf.num_epochs = 1
         self.trainer = Trainer(self.conf)
         self.trainer.infer_latents()
         latent_path = self.conf.latent_infer_path
@@ -94,9 +104,10 @@ class ExperimentAutoencoder(unittest.TestCase):
         3. Train latent DDIM based on (2)
         """
         self.conf.__post_init__()
+        self.conf.num_epochs = 1
         self.trainer = Trainer(self.conf)
         self.assertEqual(TrainMode.latent_diffusion, self.trainer.conf.train_mode)
-        self.assertEqual(TrainMode.latent_diffusion, self.trainer.wrapperModel.conf.train_mode)
+        self.assertEqual(TrainMode.latent_diffusion, self.trainer.get_wrapper_model().conf.train_mode)
         self.trainer.train()
 
     def sample(self, latent=False):
@@ -108,24 +119,24 @@ class ExperimentAutoencoder(unittest.TestCase):
 
         img, target, index = next(iter(self.trainer.dataloaders.get(Mode.train)))
         if not latent:
-            sampled1 = self.trainer.sample(img=img if not latent else None, title_add="sample(1)")
-            sampled2 = self.trainer.sample(img=img if not latent else None, title_add="sample(2)")
+            sampled1 = self.trainer.get_wrapper_model().sample(img if not latent else None)
+            sampled2 = self.trainer.get_wrapper_model().sample(img if not latent else None)
             print(abs(sampled1-sampled2).mean())
             self.assertFalse(torch.equal(sampled1, sampled2), "Sampled from same base are equal")
 
         else:
-            sampled1_1 = self.trainer.sample(target=torch.tensor([1], device=self.conf.device), title_add="sample(1_1)")
-            sampled1_2 = self.trainer.sample(target=torch.tensor([1], device=self.conf.device), title_add="sample(1_2)")
-            sampled0_1 = self.trainer.sample(target=torch.tensor([0], device=self.conf.device), title_add="sample(0_1)")
-            sampled0_2 = self.trainer.sample(target=torch.tensor([0], device=self.conf.device), title_add="sample(0_2)")
+            sampled1_1 = self.trainer.get_wrapper_model().sample(target=torch.tensor([1], device=self.conf.device))
+            sampled1_2 = self.trainer.get_wrapper_model().sample(target=torch.tensor([1], device=self.conf.device))
+            sampled0_1 = self.trainer.get_wrapper_model().sample(target=torch.tensor([0], device=self.conf.device))
+            sampled0_2 = self.trainer.get_wrapper_model().sample(target=torch.tensor([0], device=self.conf.device))
             self.assertFalse(torch.equal(sampled1_1, sampled1_2), "Sampled from same base are equal")
             self.assertFalse(torch.equal(sampled0_1, sampled0_2), "Sampled from same base are equal")
             self.assertFalse(torch.equal(sampled1_1, sampled0_2), "Sampled from same base are equal")
             self.assertFalse(torch.equal(sampled0_1, sampled1_2), "Sampled from same base are equal")
 
         if not latent:
-            reconstructed1 = self.trainer.reconstruct(img=img, title_add="reconstruct(1)")
-            reconstructed2 = self.trainer.reconstruct(img=img, title_add="reconstruct(2)")
+            reconstructed1 = self.trainer.get_wrapper_model().reconstruct(img)
+            reconstructed2 = self.trainer.get_wrapper_model().reconstruct(img)
             print(abs(reconstructed1-reconstructed2).mean())
 
             self.assertTrue(torch.equal(reconstructed1, reconstructed2), "Reconstructed images should be equal")

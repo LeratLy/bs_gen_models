@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from typing import Tuple, Union, Callable, Optional
 
 import numpy as np
@@ -11,11 +11,11 @@ from torch.nn import Module
 from src import ModelConfig
 from src._types import TrainMode, ConfigData, \
     ModelName, ModelType, CheckpointConfig, LatentNetType, LossType
+from src.metrics import setup_loss
 from src.models.dae.diffusion import SpacedDiffusionBeatGansConfig
 from src.utils.config_functioanlities import ConfigFunctionalities
 from src.utils.core import get_class
-from src.metrics import setup_loss
-from variables import DEVICE
+from variables import DEVICE, MS_MAIN_TYPE
 
 """
     Copyright (C) 2024 LeratLy - All Rights Reserved
@@ -173,11 +173,14 @@ class BaseConfig(ConfigFunctionalities):
         # Set mutable default class attributes
         self.checkpoint = CheckpointConfig(dir="checkpoints", resume_optimizer=True, resume_scheduler=True)
         self.eval: EvaluationConfig = EvaluationConfig()
+        self.classes = MS_MAIN_TYPE if self.classes is None else self.classes
 
     def __post_init__(self):
         assert self.model_name is not None, "Please specify a model name before starting the training process."
         if self.name is None:
-            self.name = self.model_name.value + "_" + self.data["name"]
+            self.name = self.model_name.value + "_" + self.data["name"] if not isinstance(self.model_name,
+                                                                                          str) else ModelName(
+                self.model_name)
         self.loss_func = setup_loss(self.loss_type)
         self.loss_func_eval = setup_loss(self.loss_type_eval)
         self.loss_kwargs = self.loss_kwargs if self.loss_kwargs is not None else dict()

@@ -61,18 +61,18 @@ class DiffusionTestCase(unittest.TestCase):
             x_t = sampler.q_sample(x_start, torch_t, noise=eps)
             x_start_pred = sampler._predict_xstart_from_eps(x_t, torch_t, eps)
             if t % show_diff_step_at == 0:
-                plot_3d_data_cloud(eps[0][0], title + " -> noise", step=t, save_to=SaveTo.tensorboard,
+                plot_3d_data_cloud(eps[0][0], title + "_noise", step=t, save_to=SaveTo.tensorboard,
                                    writer=self.trainer.writer)
-                plot_3d_data_cloud(x_t[0][0], title + " -> x_t", step=t, save_to=SaveTo.tensorboard,
+                plot_3d_data_cloud(x_t[0][0], title + "_x_t", step=t, save_to=SaveTo.tensorboard,
                                    writer=self.trainer.writer)
-                plot_3d_data_cloud(x_t[0][0], f"{title} -> x_t_{t}", step=t, save_to=SaveTo.svg,
+                plot_3d_data_cloud(x_t[0][0], f"{title}_x_t_{t}", step=t, save_to=SaveTo.svg,
                                    writer=self.trainer.writer, ax_limits=[(20,80), (20,80),(20,80)])
-                plot_3d_data_cloud(x_start_pred[0][0], title + " -> x_start_pred", step=t, save_to=SaveTo.tensorboard,
+                plot_3d_data_cloud(x_start_pred[0][0], title + "_x_start_pred", step=t, save_to=SaveTo.tensorboard,
                                    writer=self.trainer.writer)
 
     def ddim_sample_loop(self, title):
         img, target, index = next(iter(self.trainer.dataloaders.get(Mode.train)))
-        sampler = self.trainer.wrapperModel.sampler
+        sampler = self.trainer._wrapper_model.sampler
         show_diff_step_at = 100
         x_start = img.to(self.conf.device)
         T = 999

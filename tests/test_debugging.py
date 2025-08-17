@@ -21,9 +21,10 @@ def standard_conf():
     conf.model_name = ModelName.beatgans_autoencoder
     conf.model = "src.models.dae.architecture.unet_autoencoder.BeatGANsAutoencoderModel"
     conf.eval.eval_training_every_epoch = 5
-    conf.diffusion_conf.T_eval = 20
-    conf.diffusion_conf.T = 1000
-    conf.diffusion_conf.gen_type = GenerativeType.ddim
+    if conf.diffusion_conf:
+        conf.diffusion_conf.T_eval = 20
+        conf.diffusion_conf.T = 1000
+        conf.diffusion_conf.gen_type = GenerativeType.ddim
     conf.net_enc_pool = 'adaptivenonzero'
     conf.eval.eval_training_every_epoch = -1
     return conf

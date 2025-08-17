@@ -22,6 +22,8 @@ from src.utils.visualisation import plot_3d_data_cloud
     this file.
 """
 
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 
 class DataloaderHelperUnittest(unittest.TestCase):
     """
@@ -34,10 +36,10 @@ class DataloaderHelperUnittest(unittest.TestCase):
     def test_get_filenames_by(self):
         files = get_filenames_by(r".*\.npz$", os.path.join(DATA_DIR, "test_data"))
 
-        result_files = ["test3D.npz", "synapsemnist3d_2.npz", "synapsemnist3d.npz"]
+        result_files = ["test3D.npz"]
 
         # Found correct files
-        self.assertEqual(3, len(files))
+        self.assertEqual(1, len(files))
         files.sort()
         result_files.sort()
         self.assertListEqual(files, result_files)

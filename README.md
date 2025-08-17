@@ -86,3 +86,13 @@ As the project was tailored to a specifc use case, all functionalities might not
 ## Debugging
 During the project I ran into some environment issues because of version mismatches, following link helped fixing issues after reinstalling all dependencies:
 https://stackoverflow.com/questions/76309946/conda-attributeerror-module-brotli-has-no-attribute-error-after-update
+
+## Dataset
+The dataset contains 3D nnUNet segmentations of the Choroid Plexus, acquired from MRI data from patients with different manifestations of MS and without MS.
+The test dataset `test3D.npz` is only added for data loading purposes and testing.
+It is from the MedMNIST dataset and is licensed under the **Creative Commons Attribution 4.0 International (CC BY 4.0)** license:
+* Jiancheng Yang, Rui Shi, Donglai Wei, Zequan Liu, Lin Zhao, Bilian Ke, Hanspeter Pfister, Bingbing Ni. Yang, Jiancheng, et al. "MedMNIST v2-A large-scale lightweight benchmark for 2D and 3D biomedical image classification." Scientific Data, 2023.
+* Jiancheng Yang, Rui Shi, Bingbing Ni. "MedMNIST Classification Decathlon: A Lightweight AutoML Benchmark for Medical Image Analysis". IEEE 18th International Symposium on Biomedical Imaging (ISBI), 2021.<br>
+
+For more details, see the official  [MedMNIST page](https://medmnist.com/).
+The same applies to the Choroid Plexus segmentations

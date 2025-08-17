@@ -8,7 +8,7 @@ from src.models.dae.architecture.latentnet import MLPSkipNetConfig
 from src.models.dae.diffusion.base import get_named_beta_schedule
 from src.models.dae.diffusion.diffusion import space_timesteps, SpacedDiffusionBeatGansConfig
 from src.models.dae.diffusion.resample import UniformSampler
-from variables import MS_MAIN_TYPE, DATA_DIR
+from variables import MS_MAIN_TYPE, DATA_DIR, DEVICE
 
 """
     Copyright (C) 2024 LeratLy - All Rights Reserved
@@ -57,7 +57,7 @@ def _chp64_cvae_base_conf():
     conf.log_interval = 50
     conf.batch_size = 1
     conf.num_epochs = 150
-    conf.device = "cuda"
+    conf.device = DEVICE
     conf.lr = 0.0001
     conf.model_name = ModelName.conditional_variational_autoencoder
     conf.model = "src.models.vae.architecture.autoencoder.VAEModel"
@@ -73,7 +73,7 @@ def _chp96_diffae_base_conf():
     conf.log_interval = 10
     conf.batch_size = 2
     conf.num_epochs = 450
-    conf.device = "cuda"
+    conf.device = DEVICE
     conf.lr = 1e-3
     conf.model_name = ModelName.beatgans_autoencoder
     conf.model = "src.models.dae.architecture.unet_autoencoder.BeatGANsAutoencoderModel"
@@ -139,7 +139,7 @@ def get_final_base_config_latent():
     conf.num_epochs = 5000
     conf.patience = 160
     conf.use_early_stop = True
-    conf.device = "cuda"
+    conf.device = DEVICE
     conf.preprocess_img = None
     conf.create_checkpoint = True
     conf.eval.eval_training_every_epoch = 100

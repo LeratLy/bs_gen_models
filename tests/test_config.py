@@ -12,6 +12,7 @@ from variables import ROOT_DIR, DATA_DIR
 class ConfigUnittest(unittest.TestCase):
     """
     Testcases to test the configs and whether they can be used to create the correct models
+    For the first time please run in order
     """
 
     def setUp(self):
@@ -42,11 +43,9 @@ class ConfigUnittest(unittest.TestCase):
         conf = _chp96_diffae_base_conf()
         self.assertIsInstance(conf, BaseConfig)
 
-    def test_save_config(self):
+    def test_save_and_load_config(self):
         self.conf.model_conf = VAEModelConfig()
         self.conf.save("./test_files/test_config.json")
-
-    def test_load_config(self):
         self.conf = BaseConfig()
         self.conf.load("./test_files/test_config.json")
         self.conf.__post_init__()

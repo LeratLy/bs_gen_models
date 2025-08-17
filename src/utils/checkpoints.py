@@ -51,7 +51,10 @@ def resume_checkpoint(model, filename, optimizer=None, scheduler=None, skip_keys
     :param scheduler:
     :return:
     """
-    checkpoint = load(filename, weights_only=True)
+    kwargs = {}
+    if not torch.cuda.is_available():
+        kwargs["map_location"] = torch.device('cpu')
+    checkpoint = load(filename, weights_only=True, **kwargs)
     assert "model" in checkpoint, "Model is missing in checkpoint file, invalid checkpoint"
 
     state_dict = checkpoint['model']
@@ -76,15 +79,22 @@ def load_model(checkpoint_path: str, model_name: ModelName, conf: BaseConfig, lo
         model = MSClfWrapperModel(conf, logger, writer)
     else:
         raise NotImplementedError
+    kwargs = {}
+    if not torch.cuda.is_available():
+        kwargs["map_location"] = torch.device('cpu')
 
-    checkpoint = load(checkpoint_path, weights_only=True)
+    checkpoint = load(checkpoint_path, weights_only=True, **kwargs)
     state_dict = checkpoint['model']
     model.load_state_dict(state_dict, strict=False)
     return model
 
 
 def load_model_directly(model: Module, checkpoint_path: str):
-    checkpoint = load(checkpoint_path, weights_only=True)
+    kwargs = {}
+    if not torch.cuda.is_available():
+        kwargs["map_location"] = torch.device('cpu')
+
+    checkpoint = load(checkpoint_path, weights_only=True, **kwargs)
     state_dict = checkpoint['model']
     model.load_state_dict(state_dict, strict=False)
     return model

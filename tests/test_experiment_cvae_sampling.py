@@ -21,8 +21,9 @@ class ExperimentAutoencoder(unittest.TestCase):
 
     def test_train(self):
         self.conf = chp96_cvae_bernoulli_conf()
+        self.conf.num_epochs = 1
         self.conf.checkpoint["save_every_epoch"] = -1
-        self.conf.checkpoint["name"] = "checkpoints/cvae_base_20250520_204407_best"
+        # self.conf.checkpoint["name"] = "enable_and_add_checkpoint_name_for_testing"
         self.conf.eval.eval_training_every_epoch = 1
 
         self.conf.name ="cvae"
@@ -55,11 +56,13 @@ class ExperimentAutoencoder(unittest.TestCase):
         self.trainer = Trainer(self.conf)
 
         img, target, index = next(iter(self.trainer.dataloaders.get(Mode.train)))
-        sampled1 = self.trainer.sample(target=torch.tensor([1], device=self.conf.device), title_add="sample(1)")
-        sampled2 = self.trainer.sample(target=torch.tensor([0], device=self.conf.device), title_add="sample(2)")
+        img = img.to(self.trainer.conf.dtype)
 
-        reconstructed1 = self.trainer.reconstruct(img=img, target=target, title_add="reconstruct(1)")
-        reconstructed2 = self.trainer.reconstruct(img=img, target=target, title_add="reconstruct(2)")
+        sampled1 = self.trainer.get_wrapper_model().sample(target=torch.tensor([1], device=self.conf.device))
+        sampled2 = self.trainer.get_wrapper_model().sample(target=torch.tensor([0], device=self.conf.device))
+
+        reconstructed1 = self.trainer.get_wrapper_model().reconstruct(img, target=target)
+        reconstructed2 = self.trainer.get_wrapper_model().reconstruct(img, target=target)
         self.assertFalse(torch.equal(sampled1, sampled2), "Sampled from same base are equal")
         self.assertTrue(torch.equal(reconstructed1, reconstructed2), "Reconstructions should be equal")
     # -------------------------

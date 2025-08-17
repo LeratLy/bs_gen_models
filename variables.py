@@ -21,8 +21,11 @@ MS_FOLDER = "Dataset002_DFGFinetuned_3d_fullres_full_ms"
 
 # paths to datasets
 data_paths = {
+    'test3D': path_resolver(4, os.path.join(DATA_DIR, "test_data/test3D.npz")),
     'chP3D_tune_5_classes_70': path_resolver(4, DATA_DIR),
     'chP3D_tune_full_5_classes': path_resolver(4, DATA_DIR),
+    'chP3D_overfit': path_resolver(4, DATA_DIR),
+    'chP3D_tune_70': path_resolver(4, DATA_DIR),
 }
 
 split_csvs = {
@@ -34,7 +37,17 @@ split_csvs = {
     },
     'chP3D_tune_full_5_classes': {
         Mode.train: path_resolver(4, os.path.join(DATA_DIR, "train_full_data_split_5_classes.csv")),
-    }
+    },
+    # training set with only one sample (same in validation and training)
+    'chP3D_overfit': {
+        Mode.train: path_resolver(4, os.path.join(DATA_DIR, "train_overfit_nii.csv")),
+        Mode.val: path_resolver(4, os.path.join(DATA_DIR, "train_overfit_nii.csv"))
+    },
+    'chP3D_tune_70': {
+        Mode.train: path_resolver(4, os.path.join(DATA_DIR, "train_split_tune_70.csv")),
+        Mode.val: path_resolver(4, os.path.join(DATA_DIR, "val_split_tune_70.csv")),
+        Mode.test: path_resolver(4, os.path.join(DATA_DIR, "test_split_tune_70.csv"))
+    },
 }
 
 # --------------------------- Label name mappings ----------------------------------
