@@ -1,0 +1,68 @@
+{
+  "checkpoint": {
+    "dir": "checkpoints",
+    "resume_optimizer": true,
+    "resume_scheduler": true
+  },
+  "eval": {
+    "best_loss": Infinity,
+    "ema_every_samples": 0,
+    "every_samples": 0,
+    "eval_training_every_epoch": 5,
+    "num_visual_samples": 2,
+    "num_reconstructions": 2,
+    "num_evals": 10,
+    "eval_epoch_metrics_val_samples": false
+  },
+  "classes": {
+    "CIS": 0,
+    "PPMS": 0,
+    "RRMS": 0,
+    "SPMS": 0,
+    "HC": 1
+  },
+  "name": "simple_model",
+  "model_name": "simple_model",
+  "batch_size": 1,
+  "img_size": 128,
+  "log_interval": 100,
+  "num_epochs": 1,
+  "loss_type": "mse",
+  "model": "src.models.test_model.test_model.SimpleModel",
+  "data": {
+    "name": "test3D",
+    "type": "np"
+  },
+  "model_conf": {
+    "img_size": 128,
+    "dropout": 0.1
+  },
+  "loss_func_eval": null,
+  "loss_kwargs": {},
+  "loss_kwargs_eval": {},
+  "optimizer": {
+    "instance_type": "torch.optim.AdamW",
+    "settings": [
+      0.0001,
+      [
+        0.9,
+        0.999
+      ],
+      1e-08,
+      0.02
+    ]
+  },
+  "scheduler": {
+    "instance_type": "torch.optim.lr_scheduler.ReduceLROnPlateau",
+    "settings": [
+      "min",
+      0.5,
+      10,
+      0.0001,
+      "rel",
+      0,
+      1e-08
+    ]
+  },
+  "logging_dir": "logging"
+}
