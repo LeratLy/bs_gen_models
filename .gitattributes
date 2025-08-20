@@ -7,3 +7,5 @@ models/tune_xor_base_20250710_215919_plus_dropout_cond_encoder_base_20250721_231
 models/analysis_final_ms_clf_base_20250711_101044_best filter=lfs diff=lfs merge=lfs -text
 data/test_data/test3D.npz filter=lfs diff=lfs merge=lfs -text
 tests/checkpoints/simple_model_base_20250817_221449_best filter=lfs diff=lfs merge=lfs -text
+data/Dataset002_DFGFinetuned_3d_fullres_full_ms/* filter=lfs diff=lfs merge=lfs -text
+data/Dataset002_DFGFinetuned_3d_fullres_full_new_hc/* filter=lfs diff=lfs merge=lfs -text
