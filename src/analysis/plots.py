@@ -65,7 +65,7 @@ def shape_difference_plot(array1: np.array, array2: np.array, threshold: float =
 
 # if __name__ == '__main__':
 #     file_name = "prototypes_3D.npz"
-#     file_path = os.path.join(DATA_DIR, "raw_data", "original_samples_train")
+#     file_path = os.path.join(DATA_DIR, "analysis_data", "original_samples_train")
 #     npz_data = np.load(os.path.join(file_path, file_name))
 #     labels = npz_data["labels"]
 #     arrays = npz_data["images"]

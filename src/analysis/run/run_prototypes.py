@@ -9,4 +9,4 @@ if __name__ == "__main__":
     os.environ["MKL_NUM_THREADS"] = "4"
     os.environ["NUMEXPR_NUM_THREADS"] = "4"
 
-    create_prototype_latents(os.path.join(DATA_DIR, "raw_data", "original_test"))
+    create_prototype_latents(os.path.join(DATA_DIR, "analysis_data", "original_test"))

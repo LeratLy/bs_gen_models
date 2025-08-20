@@ -12,7 +12,7 @@ def setup_arg_parser():
     :return:
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("--base_path", type=str, default="raw_data",
+    parser.add_argument("--base_path", type=str, default="analysis_data",
                         help="Sub-path in DATA_DIR to data directory containing plain data (containing samples.npz, features.pkl) or multiple directories containing plain data")
     parser.add_argument("--data_folder", type=str, default=None,
                         help="Sub-path in base_bath to data directory containing plain data (containing samples.npz, features.pkl)")

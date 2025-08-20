@@ -70,7 +70,7 @@ def run_full_evaluation_for_checkpoints(base_name: str, checkpoint_dir: str, jso
                         str(checkpoint["checkpoint"])
                     )
                 ),
-                "base_path": os.path.join(DATA_DIR, "raw_data"),
+                "base_path": os.path.join(DATA_DIR, "analysis_data"),
                 "device": "cuda"
             }
             run_preparation_pipeline(pipeline_config)
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     #             # "final_cvae_5_classes_ch64_kld20_base_20250719_112945_best"
     #         )
     #     ),
-    #     "base_path": os.path.join(DATA_DIR, "raw_data"),
+    #     "base_path": os.path.join(DATA_DIR, "analysis_data"),
     #     "device": "cuda"
     # }
 
@@ -124,14 +124,14 @@ if __name__ == '__main__':
     #             "final_cvae_5_classes_ch64_kld20_base_20250719_112945_best"
     #         )
     #     ),
-    #     "base_path": os.path.join(DATA_DIR, "raw_data"),
+    #     "base_path": os.path.join(DATA_DIR, "analysis_data"),
     #     "device": "cuda"
     # }
     # run_preparation_pipeline(pipeline_config)
     # run_evaluation_pipeline(pipeline_config)
     # run_analysis_pipeline(pipeline_config)
 
-    # analysis_pipeline = AnalysisPipeline(**{"base_path": os.path.join(DATA_DIR, "raw_data"), "device": "cuda", "saved_model": None})
+    # analysis_pipeline = AnalysisPipeline(**{"base_path": os.path.join(DATA_DIR, "analysis_data"), "device": "cuda", "saved_model": None})
     # analysis_pipeline.use_hidden_initial_labels = True
     # analysis_pipeline.supported_steps = [AnalysisPipelineSteps.original_geometrics]
     # analysis_pipeline.run()

@@ -41,7 +41,7 @@ def main():
     print(f"CUDA device: {os.environ['CUDA_VISIBLE_DEVICES']}")
     print(f"Num threads: {args.num_threads}")
 
-    base_folder = os.path.join(DATA_DIR, "raw_data")
+    base_folder = os.path.join(DATA_DIR, "analysis_data")
     original_folders = ["original_test", "original_val", "original_train"]
     sampled_folders = [f"{model_name}_sampled", f"{model_name}_sampled", f"{model_name}_sampled_train"]
     data_folders = list(set(original_folders + sampled_folders))

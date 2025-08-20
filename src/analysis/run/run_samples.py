@@ -18,10 +18,11 @@ def setup_arg_parser():
     parser.add_argument("--no_sampled", action="store_true", help="Whether to save new samples ones to file")
     parser.add_argument("--no-infer", action="store_true", help="Whether to save inferred latents to file")
     parser.add_argument("--device", type=str, default="cpu", help="Which device to use for model")
-    parser.add_argument("--model_name", required=True, type=str, default=None, help="Type of model (e.g 'cvae', 'bdae')")
+    parser.add_argument("--model_name", required=True, type=str, default=None,
+                        help="Type of model (e.g 'cvae', 'bdae')")
     parser.add_argument("--checkpoint_dir", required=True, type=str, default=None,
                         help="Sub-path in DATA_DIR to checkpoint file")
-    parser.add_argument("--base_path", type=str, default="raw_data",
+    parser.add_argument("--base_path", type=str, default="analysis_data",
                         help="Sub-path in DATA_DIR to data directory (containing plain numpy files) and to story features.pkl")
     return parser.parse_args()
 
