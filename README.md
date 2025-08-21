@@ -8,8 +8,8 @@ The implementation if the bernoulli diffusion process is based on https://github
 
 ## Visuals
 Two examples for generated prototypes (with original data as shadow in the back, showing variance)
-![MS](https://github.com/LeratLy/bs_gen_models/reports/figures/ms_prototype.png)
-![HC](https://github.com/LeratLy/bs_gen_models/reports/figures/hc_prototype.png)
+![hc_prototype.png](reports/figures/hc_prototype.png)
+![ms_prototype.png](reports/figures/ms_prototype.png)
 
 ## Installation
 
