@@ -70,7 +70,7 @@ You can add a new folder for your model there or modify the existing ones.
 ### Analysis
 For the analysis go to the `src/analysis` folder. You can run the `analysis.ipynb` AFTER you created all corresponding files with the `pipelines`
 1. Run pipelines for your model. Use the `run_pipelines.py. There are examples (commented out) how I used the pipeline with json configurations. The configs are saved in the model folder. Otherwise, you can also run the pipeline independently for your models as in the example which is not commented out. For the trained models, the corresponding config is saved within the `models` folder.
-2. Now you can run the `analysis.ipynb`. Please set the model name accordingly, if you use a new model, add the name to the `_types.py`  file as it is already done for trained models.
+2. Now you can run the `analysis.ipynb`. Please set the model name accordingly, if you use a new model, add the name to the `_types.py`  file as it is already done for trained models and has been used for assessing model evaluation metrics, generation ability and to evaluate geometric properties. The notebook can be improved regarding structure and format, feel free to adapt it for your needs.
 
 ### Monitoring Training:
 To monitor the training start the Tensorboard: 
