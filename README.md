@@ -8,8 +8,10 @@ The implementation if the bernoulli diffusion process is based on https://github
 
 ## Visuals
 Two examples for generated prototypes (with original data as shadow in the back, showing variance)
-![hc_prototype.png](reports/figures/hc_prototype.png)
-![ms_prototype.png](reports/figures/ms_prototype.png)
+<p float="left">
+   <img width="250" src="reports/figures/hc_prototype.png"></img>
+   <img width="250" src="reports/figures/ms_prototype.png"></img>
+</p>
 
 ## Installation
 
