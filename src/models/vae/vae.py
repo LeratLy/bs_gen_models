@@ -121,8 +121,9 @@ class VAE(BaseModel):
         """
         # Sample adn evaluate samples
         self.logger.file_logger.info("\nStarted sampling...")
+        num_classes = self.conf.clf_conf.classifier_conf.model_conf.num_classes if self.conf.clf_conf is not None else len(set(self.conf.classes.values()))
         sampled, sampled_targets = self.create_samples_per_class(self.conf.eval.num_evals,
-                                                                 self.conf.clf_conf.classifier_conf.model_conf.num_classes,
+                                                                 num_classes,
                                                                  min(self.conf.batch_size, self.conf.eval.num_evals))
         unique_values, counts = torch.unique(sampled_targets, return_counts=True)
         self.logger.file_logger.info(f"\nEvaluating {self.conf.eval.num_evals} samples -> {unique_values}: {counts}")
@@ -132,7 +133,7 @@ class VAE(BaseModel):
 
         # Sample and visually render samples
         sampled, sampled_targets = self.create_samples_per_class(self.conf.eval.num_visual_samples,
-                                                                 self.conf.clf_conf.classifier_conf.model_conf.num_classes,
+                                                                 num_classes,
                                                                  min(self.conf.eval.num_visual_samples,
                                                                      self.conf.batch_size))
         for i, img in enumerate(sampled):

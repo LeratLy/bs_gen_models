@@ -11,8 +11,9 @@ DATA_DIR = os.path.join(ROOT_DIR, "data") # Data is searched within this directo
 MODEL_DIR = os.path.join(ROOT_DIR, "models") # Trained models will be loaded from this directory
 ANALYSIS_DATA_DIR = os.path.join(DATA_DIR, "analysis") # Data for analysis will be loaded from this directory
 
-DEVICE = "cpu"
+DEVICE = "cuda:0"
 
+# Metadata is not available as it contains private information
 META_MS = "MSData_noNMO.xlsx"
 META_HC = "HCData.xlsx"
 

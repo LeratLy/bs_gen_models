@@ -3,16 +3,19 @@ from functools import partial
 
 import numpy as np
 from ray import tune
+from ray import tune as ray_tune
 
 from run_models.clf_templates import get_chP96_clf_2cond_conf
 from run_models.model_templates import assign_model_config
 from src._types import LossType, DataType
 from src.config import TorchInstanceConfig
 from src.k_fold import run_k_fold
-from ray import tune as ray_tune
-from variables import MS_MAIN_TYPE, DATA_DIR, DEVICE, ROOT_DIR
+from variables import MS_MAIN_TYPE, DEVICE, ROOT_DIR
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+"""
+NOTE! For k-fold, please add split files to `variables.py`
+"""
+os.environ["CUDA_VISIBLE_DEVICES"] = "7"
 os.environ["OMP_NUM_THREADS"] = "4"
 os.environ["MKL_NUM_THREADS"] = "4"
 os.environ["NUMEXPR_NUM_THREADS"] = "4"

@@ -49,7 +49,7 @@ def run_latent_sample():
     trainer = Trainer(conf)
     trainer.conf.eval.eval_epoch_metrics_val_samples = False
     trainer.conf.eval.eval_training_every_epoch = 50
-    conf.checkpoint["name"] = os.path.join(DATA_DIR, "checkpoints_latent_dae", "xor_deep_latentdiffusion_20250702_003125_best")
+    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "final_latent_5_cond_encoder_alpha_20_hidden1024_latentdiffusion_20250723_195439_best")
     trainer.get_wrapper_model().create_samples_per_class(2, 2, 1)
 
 
@@ -80,7 +80,7 @@ def run_latent_train():
     conf.checkpoint["resume_optimizer"] = False
     conf.checkpoint["resume_scheduler"] = False
     conf.create_checkpoint = False
-    conf.checkpoint["name"] = os.path.join(DATA_DIR, "checkpoints_last_dae", "tune_xor_base_20250630_171615_best")
+    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_plus_dropout_cond_encoder_base_20250721_231432_best")
 
     conf.__post_init__()
     trainer = Trainer(conf)
@@ -112,7 +112,7 @@ def run_sample_base():
     conf.checkpoint["resume_optimizer"] = False
     conf.ema_decay = 0.9
 
-    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_plus_dropout_base_20250721_130617_best")
+    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_plus_dropout_cond_encoder_base_20250721_231432_best")
     conf.checkpoint['dir'] = os.path.join(ROOT_DIR, "checkpoints")
     conf.logging_dir = os.path.join(ROOT_DIR, "logging")
     conf.run_dir = os.path.join(ROOT_DIR, "runs")
@@ -128,7 +128,7 @@ def run_sample_base():
     trainer.close()
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     os.environ["OMP_NUM_THREADS"] = "4"
     os.environ["MKL_NUM_THREADS"] = "4"
     os.environ["NUMEXPR_NUM_THREADS"] = "4"

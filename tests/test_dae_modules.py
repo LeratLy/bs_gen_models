@@ -3,12 +3,12 @@ import unittest
 import torch
 from tqdm import tqdm
 
+from run_models.model_templates import assign_diffusion_conf
 from src._types import ModelType, Mode, SaveTo, NoiseType, LossType
 from src.models.dae.architecture.blocks import ResBlock, ResBlockConfig
 from src.models.dae.architecture.unet import BeatGANsAutoencoderConfig, BeatGANsEncoderModel, BeatGANsUNetConfig, \
     BeatGANsUNetModel
 from src.models.dae.diffusion.resample import UniformSampler
-from run_models.model_templates import assign_diffusion_conf
 from src.models.trainer import Trainer
 from src.utils.visualisation import plot_3d_data_cloud
 from tests.test_debugging import overfit_conf, autoencoder_conf
@@ -117,16 +117,16 @@ class DAETestCase(unittest.TestCase):
 
     def forward_diffusion(self, conf, title, normalized=False):
         self.trainer = Trainer(conf)
-        img, target, index = next(iter(self.trainer.dataloaders.get(Mode.train)))
+        img, target, index = self.trainer.dataloaders.get(Mode.train).dataset.__getitem__(0)
         sampler = assign_diffusion_conf(conf, 1000).make_sampler()
         show_diff_step_at = 20
-        x_start = img.to(conf.device)
+        x_start = img.to(conf.device, dtype=conf.dtype).unsqueeze(0)
         title += ("_normalized" if normalized else "_clamped")
         plot_3d_data_cloud(x_start[0][0], title, step=0, save_to=SaveTo.tensorboard,
                            writer=self.trainer.writer)
         for t in tqdm(range(1, 301)):
-            torch_t = torch.tensor([t], device=conf.device, dtype=torch.int64)
-            out = sampler.training_losses(model=self.trainer.wrapperModel.model, x_start=x_start, t=torch_t)
+            torch_t = torch.tensor([t], device=conf.device, dtype=torch.int32)
+            out = sampler.training_losses(model=self.trainer._wrapper_model.model, x_start=x_start, t=torch_t)
             x = out["x_t"]
             if t % show_diff_step_at == 0:
                 if normalized:
@@ -159,12 +159,12 @@ class TrainedDAETestCase(unittest.TestCase):
 
     def reverse_diffusion(self, title):
         img, target, index = list(self.trainer.dataloaders.get(Mode.train))[0]
-        sampler = self.trainer.wrapperModel.sampler
+        sampler = self.trainer._wrapper_model.sampler
         show_diff_step_at = 100
-        x = img.to(self.conf.device)
+        x = img.to(self.conf.device, dtype=self.conf.dtype)
         T = 1000
         for t in tqdm(range(0, T)):
-            torch_t = torch.tensor([t], device=self.conf.device, dtype=torch.int64)
+            torch_t = torch.tensor([t], device=self.conf.device, dtype=torch.int32)
             eps = sampler.get_noise(img, torch_t).to(self.conf.device)
             x_t = sampler.q_sample(x, torch_t, noise=eps)
             x = sampler._predict_xstart_from_eps(x_t, torch_t, eps)
@@ -181,6 +181,7 @@ def get_overfit_config():
     conf = autoencoder_conf()
     overfit_conf(conf)
     conf.name = "chP3D_overfit_gaussian"
+    conf.eval.eval_training_every_epoch = -1
     return conf
 
 

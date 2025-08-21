@@ -39,7 +39,6 @@ class Trainer:
     # TODO handle distributed computing based on gpus and nodes (Distributed Data Parallel) with DistributedSampler
     def __init__(self, conf: BaseConfig):
         self.best_model = None
-        torch.cuda.empty_cache()
         self.dataloaders = None
         self.early_stop = False
         self.counter = 0
@@ -510,27 +509,31 @@ class Trainer:
         sample_list = []
         target_list = []
         unique_targets = set()
-        while num_samples > 0:
-            for batch_idx, (features, targets, data_ids) in enumerate(dataloader):
-                if num_samples == 0:
-                    break
-                if num_samples > self.conf.batch_size:
-                    add_samples = self.conf.batch_size
-                else:
-                    add_samples = num_samples
+        if self.conf.eval.eval_training_every_epoch > 0 and hasattr(dataloader.dataset, "labels"):
+            assert num_samples >= len(
+                set(dataloader.dataset.labels)) and num_samples >= len(set(self.conf.classes.values())), "Not enough different samples in dataset, please adapt num_reconstructions in your config."
+            while num_samples > 0:
+                for batch_idx, (features, targets, data_ids) in enumerate(dataloader):
+                    if num_samples == 0:
+                        break
+                    if num_samples > self.conf.batch_size:
+                        add_samples = self.conf.batch_size
+                    else:
+                        add_samples = num_samples
 
-                samples = features[:add_samples]
-                targets = targets[:add_samples]
-                unique_before = len(unique_targets)
-                unique_targets.update(targets.tolist())
-                if self.conf.classes is None or len(unique_targets) == len(
-                        set(self.conf.classes.values())) or unique_before < len(unique_targets):
-                    sample_list.append(samples.to(self.conf.device, dtype=self.conf.dtype))
-                    target_list.append(targets.to(self.conf.device))
-                    num_samples -= add_samples
-        self.logger.file_logger.info(
-            f"Created {self.conf.eval.num_reconstructions} samples: sample length={len(torch.cat(sample_list))}, target length={torch.cat(target_list)}")
-        return torch.cat(sample_list), torch.cat(target_list)
+                    samples = features[:add_samples]
+                    targets = targets[:add_samples]
+                    unique_before = len(unique_targets)
+                    unique_targets.update(targets.tolist())
+                    if self.conf.classes is None or len(unique_targets) == len(
+                            set(self.conf.classes.values())) or unique_before < len(unique_targets):
+                        sample_list.append(samples.to(self.conf.device, dtype=self.conf.dtype))
+                        target_list.append(targets.to(self.conf.device))
+                        num_samples -= add_samples
+            self.logger.file_logger.info(
+                f"Created {self.conf.eval.num_reconstructions} samples: sample length={len(torch.cat(sample_list))}, target length={torch.cat(target_list)}")
+            return torch.cat(sample_list), torch.cat(target_list)
+        return torch.tensor([], device=self.conf.device), torch.tensor([], device=self.conf.device)
 
     def switch_train_mode(self, mode: TrainMode):
         """

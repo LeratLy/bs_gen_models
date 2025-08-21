@@ -8,7 +8,7 @@ from run_models.model_templates import assign_model_config, chp96_cvae_bernoulli
 from src._types import ModelName
 from src.config import ClfConfig
 from src.models.trainer import Trainer
-from variables import MS_MAIN_TYPE, DATA_DIR
+from variables import MS_MAIN_TYPE, MODEL_DIR, ROOT_DIR
 
 
 def main(config):
@@ -60,9 +60,9 @@ def setup_conf():
     conf.ema_decay = 0.95
     conf.patience = 80
     conf.use_early_stop = True
-    conf.checkpoint['dir'] = os.path.join(DATA_DIR, "final_models", "checkpoints", "final_cvae")
-    conf.logging_dir = os.path.join(DATA_DIR, "final_models", "logging", "final_cvae")
-    conf.run_dir = os.path.join(DATA_DIR, "final_models", "runs", "final_cvae")
+    conf.checkpoint['dir'] = os.path.join(ROOT_DIR, "checkpoints", "final_cvae")
+    conf.logging_dir = os.path.join(ROOT_DIR, "logging", "final_cvae")
+    conf.run_dir = os.path.join(ROOT_DIR, "runs", "final_cvae")
     conf.batch_size = 32
     conf.accum_batches = 1
     conf.log_interval = 50
@@ -74,7 +74,7 @@ def setup_conf():
     conf.preprocess_img = "crop"
     conf.randomWeightedTrainSet = False
     conf.clf_conf = ClfConfig(
-        os.path.join(MODEL_DIR, "ms_clf_base_20250708_160859_best"),
+        os.path.join(MODEL_DIR, "analysis_final_ms_clf_base_20250711_101044_best"),
         ModelName.ms_clf,
         get_chP96_clf_2cond_conf(),
     )
@@ -82,7 +82,7 @@ def setup_conf():
 
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "7"
     os.environ["OMP_NUM_THREADS"] = "4"
     os.environ["MKL_NUM_THREADS"] = "4"
     os.environ["NUMEXPR_NUM_THREADS"] = "4"

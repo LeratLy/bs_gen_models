@@ -127,7 +127,7 @@ class DAE(BaseModel):
             if mode != Mode.train and self.conf.add_running_metrics is not None and "reconstruction" in self.conf.add_running_metrics and (
                     self.epoch_idx + 1) % self.conf.eval.eval_training_every_epoch == 0:
                 sampled = self.render(x_start, target=target)
-                add_metrics["reconstruction"] = bce_loss(x_start, sampled)
+                add_metrics["reconstruction"] = bce_loss(unnormalize_gaussian(x_start) if self.conf.diffusion_conf.noise_type == NoiseType.gaussian else x_start, sampled)
         elif self.conf.train_mode.require_dataset_infer():
             """
             Training semantic model (latent ddim)

@@ -25,7 +25,9 @@ class ExperimentAutoencoder(unittest.TestCase):
         # 1. train main xor diffae
         self.conf = chp96_diffae_xor_conf()
         self.conf.num_epochs = 1
+        self.conf.eval.eval_training_every_epoch = 1
         self.conf.name ="xor_deep_32"
+        self.conf.__post_init__()
         self.training()
 
     def test_semantic_xor(self):
@@ -70,6 +72,8 @@ class ExperimentAutoencoder(unittest.TestCase):
         # 1. Train main model in with mode TrainingMode.base (standard)
         self.conf = chp96_diffae_gaussian_conf()
         self.conf.num_epochs = 1
+        self.conf.eval.eval_training_every_epoch = 1
+        self.conf.__post_init__()
         self.training()
 
     # ---------------------------

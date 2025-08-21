@@ -24,6 +24,7 @@ class AnalysisPipelineSteps(Enum):
     """
     proto = "prototype_generation"
     clusters = "clustering"
+    cluster_prototypes = "clustering_prototypes"
     original_geometrics = "original_geometrics"
     model_geometrics = "model_geometrics"
 
@@ -36,7 +37,8 @@ class ClusterConfig:
 
 class AnalysisPipeline(Pipeline):
     supported_steps = [AnalysisPipelineSteps.proto, AnalysisPipelineSteps.clusters,
-                       AnalysisPipelineSteps.model_geometrics, AnalysisPipelineSteps.original_geometrics]
+                       AnalysisPipelineSteps.cluster_prototypes, AnalysisPipelineSteps.model_geometrics,
+                       AnalysisPipelineSteps.original_geometrics]
     cluster_config: ClusterConfig = ClusterConfig()
     initial_class_details = MS_TYPE_DETAILS
     main_class_details = MS_MAIN_TYPE_DETAILS
@@ -135,40 +137,43 @@ class AnalysisPipeline(Pipeline):
                                      initial_markers=self.initial_class_details["markers"],
                                      mode=self.cluster_config.mode, initial_labels=initial_labels, kwargs=kwargs
                                      )
-        cluster_means, cluster_labels = create_cluster_means(embeddings, reducer_result, n_clusters=num_clusters)
-        cluster_means = torch.from_numpy(cluster_means).to(self.device)
-        labels = torch.arange(0, cluster_means.shape[0])
-        if self.saved_model.model_name.is_bdae():
-            prototype_tensor = self.model._render(cond=cluster_means, ema=True)
-        else:
-            prototype_tensor = self.model.render(cluster_means, target=labels.to(device=self.device))
 
-        numpy_prototypes = prototype_tensor.detach().cpu().numpy()
-        np.savez(os.path.join(save_path, "cluster_prototypes.npz"),
-                 images=numpy_prototypes,
-                 labels=labels.detach().numpy()
-        )
-        np.savez(os.path.join(save_path, "clustered_labels.npz"),
-                 cluster_labels=cluster_labels,
-        )
+        if AnalysisPipelineSteps.cluster_prototypes in self.supported_steps:
+            cluster_means, cluster_labels = create_cluster_means(embeddings, reducer_result, n_clusters=num_clusters)
+            cluster_means = torch.from_numpy(cluster_means).to(self.device)
+            labels = torch.arange(0, cluster_means.shape[0])
+            if self.saved_model.model_name.is_bdae():
+                prototype_tensor = self.model._render(cond=cluster_means, ema=True)
+            else:
+                raise NotImplementedError("Decoding prototypes without class label is not possible for CVAE or your model")
+                # prototype_tensor = self.model.render(cluster_means, target=labels.to(device=self.device))
 
-        cmap = cm.viridis
-        colors = [cmap(i / (num_clusters - 1)) for i in range(num_clusters)]
-        print(numpy_prototypes.shape[0])
-        dark_colors = [tuple([max(0, x * 0.5) for x in color[:3]]) + (color[3],)
-                       for color in colors]
+            numpy_prototypes = prototype_tensor.detach().cpu().numpy()
+            np.savez(os.path.join(save_path, "cluster_prototypes.npz"),
+                     images=numpy_prototypes,
+                     labels=labels.detach().numpy()
+                     )
+            np.savez(os.path.join(save_path, "clustered_labels.npz"),
+                     cluster_labels=cluster_labels,
+                     )
 
-        variance_data = self.get_variance_data(original_folders, cluster_labels)
-        self.plot_prototypes(numpy_prototypes, "Cluster Prototypes", names=list(map(str, range(8))),
-                             colors=colors, edgecolors=dark_colors, save_to=".png", individually=True,
-                             overlay_array=variance_data)
-        self.plot_prototypes(numpy_prototypes, "Cluster Prototypes", names=list(map(str, range(8))),
-                             colors=colors, edgecolors=dark_colors, save_to=".svg", individually=True,
-                             overlay_array=variance_data)
+            cmap = cm.viridis
+            colors = [cmap(i / (num_clusters - 1)) for i in range(num_clusters)]
+            print(numpy_prototypes.shape[0])
+            dark_colors = [tuple([max(0, x * 0.5) for x in color[:3]]) + (color[3],)
+                           for color in colors]
+
+            variance_data = self.get_variance_data(original_folders, cluster_labels)
+            self.plot_prototypes(numpy_prototypes, "Cluster Prototypes", names=list(map(str, range(8))),
+                                 colors=colors, edgecolors=dark_colors, save_to=".png", individually=True,
+                                 overlay_array=variance_data)
+            self.plot_prototypes(numpy_prototypes, "Cluster Prototypes", names=list(map(str, range(8))),
+                                 colors=colors, edgecolors=dark_colors, save_to=".svg", individually=True,
+                                 overlay_array=variance_data)
 
     def plot_prototypes(self, prototype_array, title, colors=MS_TYPE_MAIN_COLORS, edgecolors=MS_TYPE_MAIN_EDGECOLORS,
-                    names=LABEL_TO_MAIN_NAME, save_to: str = None, individually: bool = False,
-                    overlay_array: np.ndarray = None):
+                        names=LABEL_TO_MAIN_NAME, save_to: str = None, individually: bool = False,
+                        overlay_array: np.ndarray = None):
         cols = prototype_array.shape[0] if not individually else 1
         rows = 1
         fig = plt.figure(figsize=(cols * 6, rows * 6))

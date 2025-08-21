@@ -8,16 +8,16 @@ from torch.utils.data import DataLoader
 from torch.utils.tensorboard import SummaryWriter
 
 from run_models.clf_templates import get_chP96_clf_2cond_model_conf, get_chP96_clf_2cond_conf
-from run_models.dae.tune_hyperparams_latent import get_base_config_latent
 from run_models.model_templates import chp96_cvae_bernoulli_conf, get_final_base_config_latent
 from src import MSClfNet
-from src._types import SavedModelTypes, LossType, NoiseType, GenerativeType, Activation, ModelName
+from src._types import SavedModelTypes, ModelName
 from src.config import ClfConfig
 from src.data.datasets import SimpleDataset
 from src.models.dae.dae import DAE
 from src.models.vae.vae import VAE
 from src.utils.checkpoints import load_model_directly
 from src.utils.logger import TrainingLogger
+from variables import MODEL_DIR
 
 
 def load_latents_from_multiple_folders(paths: list[str], file_name: str = "features.pkl", kwargs_load: dict = None):
@@ -122,7 +122,7 @@ def load_model_with_checkpoint(model_name: SavedModelTypes, checkpoint_dir, add_
     elif model_name.is_bdae():
         conf = get_final_base_config_latent()
         conf.clf_conf = ClfConfig(
-            "path/to//data/final_models/checkpoints/analysis_final_ms_clf_base_20250711_101044_best",
+            os.path.join(MODEL_DIR, "analysis_final_ms_clf_base_20250711_101044_best"),
             ModelName.ms_clf,
             get_chP96_clf_2cond_conf(),
         )

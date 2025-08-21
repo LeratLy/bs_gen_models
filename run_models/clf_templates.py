@@ -4,7 +4,7 @@ from run_models.model_templates import assign_model_config
 from src import MSClfNetConfig
 from src._types import ModelName, DataType, LossType
 from src.config import BaseConfig, TorchInstanceConfig
-from variables import MS_TYPES_FILTERED, MS_MAIN_TYPE, DATA_DIR
+from variables import MS_MAIN_TYPE, ROOT_DIR
 
 
 def _chP96_clf_base_conf():
@@ -39,9 +39,9 @@ def _chP96_clf_base_conf():
     conf.patience = 50
     conf.preprocess_img = "crop"
 
-    conf.checkpoint['dir'] = os.path.join(DATA_DIR, "final_models", "checkpoints")
-    conf.logging_dir = os.path.join(DATA_DIR, "final_models", "logging")
-    conf.run_dir = os.path.join(DATA_DIR, "final_models", "runs")
+    conf.checkpoint['dir'] = os.path.join(ROOT_DIR, "checkpoints")
+    conf.logging_dir = os.path.join(ROOT_DIR, "logging")
+    conf.run_dir = os.path.join(ROOT_DIR, "runs")
 
     conf.scheduler = TorchInstanceConfig(
         instance_type="torch.optim.lr_scheduler.ReduceLROnPlateau",

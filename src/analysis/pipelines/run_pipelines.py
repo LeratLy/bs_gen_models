@@ -6,24 +6,21 @@ from src.analysis.pipelines.analysis_pipeline import AnalysisPipeline, AnalysisP
 from src.analysis.pipelines.evaluation_pipeline import EvaluationPipeline, EvaluationPipelineSteps
 from src.analysis.pipelines.pipeline import SavedModel
 from src.analysis.pipelines.preperation_pipeline import PreparationPipeline, PreparationSteps
-from variables import DATA_DIR, MS_TYPES_TO_MAIN_TYPE
+from variables import DATA_DIR, MS_TYPES_TO_MAIN_TYPE, MODEL_DIR
 
 
 def run_preparation_pipeline(pipeline_config):
     preparationPipeline = PreparationPipeline(**pipeline_config)
-    preparationPipeline.supported_steps = [PreparationSteps.infer, PreparationSteps.sample_model]
     preparationPipeline.save_single_images = False
     preparationPipeline.use_hidden_initial_labels = True
-    preparationPipeline.num_model_samples = [200, 200, 200, 200, 200] # [200, 29, 3, 160, 8] #[100, 15, 2, 79, 4] # [200, 29, 3, 160, 8]
+    preparationPipeline.num_model_samples = [32, 32, 32, 32, 32] # [200, 200, 200, 200, 200] # [200, 29, 3, 160, 8] #[100, 15, 2, 79, 4] # [200, 29, 3, 160, 8]
     preparationPipeline.run()
 
 def run_evaluation_pipeline(pipeline_config):
     pipeline_config["saved_clf"] = SavedModel(
         model_name=SavedModelTypes.clf,
         checkpoint_path= os.path.join(
-            DATA_DIR,
-            "final_models",
-            "checkpoints",
+            MODEL_DIR,
             "analysis_final_ms_clf_base_20250711_101044_best"
         ),
     )
@@ -38,7 +35,8 @@ def run_analysis_pipeline(pipeline_config):
         del pipeline_config["saved_clf"]
     analysis_pipeline = AnalysisPipeline(**pipeline_config)
     analysis_pipeline.use_hidden_initial_labels = True
-    analysis_pipeline.supported_steps = [AnalysisPipelineSteps.model_geometrics, AnalysisPipelineSteps.proto, AnalysisPipelineSteps.clusters]
+    # Use for CVAE as cluster_prototypes is not supported yet
+    # analysis_pipeline.supported_steps = [AnalysisPipelineSteps.original_geometrics, AnalysisPipelineSteps.model_geometrics, AnalysisPipelineSteps.proto, AnalysisPipelineSteps.clusters]
     analysis_pipeline.run()
 
 def run_full_evaluation_for_checkpoints(base_name: str, checkpoint_dir: str, json_config_path: str):
@@ -80,13 +78,14 @@ def run_full_evaluation_for_checkpoints(base_name: str, checkpoint_dir: str, jso
             raise Exception(f"Unknown checkpoint config {checkpoint}")
 
 if __name__ == '__main__':
-    os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "0"
     os.environ["OMP_NUM_THREADS"] = "4"
     os.environ["MKL_NUM_THREADS"] = "4"
     os.environ["NUMEXPR_NUM_THREADS"] = "4"
 
-    base_path = os.path.join(DATA_DIR, "final_models", "checkpoints", "cond_encoder_shift_scale")
-    run_full_evaluation_for_checkpoints("bdae", base_path, 'bdae_comparison_checkpoints_scaled+shift.json')
+    # HINT: Examples for creating analysis data for multiple models (add them to a json and let them be analysed automatically)
+    # base_path = MODEL_DIR
+    # run_full_evaluation_for_checkpoints("bdae", base_path, 'bdae_comparison_checkpoints_scaled+shift.json')
 
     # base_path = os.path.join(DATA_DIR, "final_models", "checkpoints", "cond_encoder_scale")
     # run_full_evaluation_for_checkpoints("bdae", base_path, 'bdae_comparison_checkpoints_scaled.json')
@@ -115,21 +114,18 @@ if __name__ == '__main__':
     #     "device": "cuda"
     # }
 
-    # pipeline_config = {
-    #     "saved_model": SavedModel(
-    #         model_name=SavedModelTypes.cvae_64_20_5_classes,
-    #         config_kwargs={"kld": 20, "ch": 64, "num_classes": 5},
-    #         checkpoint_path= os.path.join(
-    #             base_path,
-    #             "final_cvae_5_classes_ch64_kld20_base_20250719_112945_best"
-    #         )
-    #     ),
-    #     "base_path": os.path.join(DATA_DIR, "analysis_data"),
-    #     "device": "cuda"
-    # }
-    # run_preparation_pipeline(pipeline_config)
-    # run_evaluation_pipeline(pipeline_config)
-    # run_analysis_pipeline(pipeline_config)
+    pipeline_config = {
+        "saved_model": SavedModel(
+            model_name=SavedModelTypes.bdae_20_1024_5_cond_encoder_shift_scale_alpha,
+            config_kwargs={"layers": 20, "hidden_ch": 1024, "num_classes": 5, "model_conf_num_classes": 5, "latent_net_conf_num_classes": 5, "class_znormalize": True, "enc_merge_time_and_cond_embedding": True, "scale_target_alpha": True, "shift_target": True, "latent_infer_path": os.path.join(MODEL_DIR, "final_latents_cond_encoder_class_spec_norm.pkl") },
+            checkpoint_path= os.path.join(MODEL_DIR, "final_latent_5_cond_encoder_alpha_20_hidden1024_latentdiffusion_20250723_195439_best")
+        ),
+        "base_path": os.path.join(DATA_DIR, "analysis_data"),
+        "device": "cuda"
+    }
+    run_preparation_pipeline(pipeline_config)
+    run_evaluation_pipeline(pipeline_config)
+    run_analysis_pipeline(pipeline_config)
 
     # analysis_pipeline = AnalysisPipeline(**{"base_path": os.path.join(DATA_DIR, "analysis_data"), "device": "cuda", "saved_model": None})
     # analysis_pipeline.use_hidden_initial_labels = True

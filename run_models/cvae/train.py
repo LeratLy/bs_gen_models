@@ -1,9 +1,11 @@
+import os.path
+
 from src._types import ModelName
 from src.config import ClfConfig
 from run_models.clf_templates import get_chP96_clf_2cond_conf
 from run_models.model_templates import assign_model_config, chp96_cvae_bernoulli_conf
 from src.models.trainer import Trainer
-from variables import MS_MAIN_TYPE
+from variables import MS_MAIN_TYPE, MODEL_DIR
 
 
 def train():
@@ -16,9 +18,9 @@ def setup_conf():
     conf.checkpoint["save_every_epoch"] = -1
     conf.eval.eval_training_every_epoch = 1
     conf.name = "cvae_tune"
-    conf.checkpoint['dir'] = "path/to/project/bs_gen_models/checkpoints"
-    conf.logging_dir = "path/to/project/bs_gen_models/logging"
-    conf.run_dir = "path/to/project/bs_gen_models/runs/"
+    conf.checkpoint['dir'] = "./checkpoints"
+    conf.logging_dir = "./logging"
+    conf.run_dir = "./runs/"
     conf.batch_size = 4
     conf.log_interval = 5
     conf.accum_batches = 8
@@ -40,7 +42,7 @@ def setup_conf():
     conf.grad_clip = 1.0
     conf.dropout = 0.2
     conf.clf_conf = ClfConfig(
-        "path/to/project/bs_gen_models/models/ms_clf_base_20250531_230409_best_2_classes",
+        os.path.join(MODEL_DIR, "analysis_final_ms_clf_base_20250711_101044_best"),
         ModelName.ms_clf,
         get_chP96_clf_2cond_conf(),
     )

@@ -8,7 +8,7 @@ from src.models.dae.architecture.latentnet import MLPSkipNetConfig
 from src.models.dae.diffusion.base import get_named_beta_schedule
 from src.models.dae.diffusion.diffusion import space_timesteps, SpacedDiffusionBeatGansConfig
 from src.models.dae.diffusion.resample import UniformSampler
-from variables import MS_MAIN_TYPE, DATA_DIR, DEVICE
+from variables import MS_MAIN_TYPE, ROOT_DIR, DEVICE
 
 """
     Copyright (C) 2024 LeratLy - All Rights Reserved
@@ -144,9 +144,9 @@ def get_final_base_config_latent():
     conf.create_checkpoint = True
     conf.eval.eval_training_every_epoch = 100
     conf.eval.eval_epoch_metrics_val_samples = False
-    conf.checkpoint['dir'] = os.path.join(DATA_DIR, "final_models", "checkpoints")
-    conf.logging_dir = os.path.join(DATA_DIR, "final_models", "logging")
-    conf.run_dir = os.path.join(DATA_DIR, "final_models", "runs")
+    conf.checkpoint['dir'] = os.path.join(ROOT_DIR, "checkpoints")
+    conf.logging_dir = os.path.join(ROOT_DIR, "logging")
+    conf.run_dir = os.path.join(ROOT_DIR, "runs")
     conf.eval.num_samples = 2
     conf.eval.num_evals = 10
     conf.eval.num_reconstructions = 2
@@ -249,6 +249,7 @@ def chp96_diffae_xor_conf():
 
 def chp96_diffae_gaussian_conf():
     conf = _chp96_diffae_diffusion_conf(_chp96_diffae_model_conf(_chp96_diffae_base_conf()))
+    conf.loss_func = LossType.mse
     conf.name = "gaussian_deep"
     return conf
 

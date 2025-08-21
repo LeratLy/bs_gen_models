@@ -7,7 +7,8 @@ from run_models.model_templates import assign_model_config
 from src._types import ModelGradType, LossType, DataType, ModelName, NoiseType, GenerativeType, Activation
 from src.config import BaseConfig, TorchInstanceConfig
 from src.models.trainer import Trainer
-from variables import MS_MAIN_TYPE, DATA_DIR, ROOT_DIR
+from variables import MS_MAIN_TYPE, ROOT_DIR
+
 
 def main(config, model_type="gaussian"):
     result = tune.run(
@@ -111,7 +112,7 @@ def get_base_config():
 
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"] = "5"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "7"
     os.environ["OMP_NUM_THREADS"] = "4"
     os.environ["MKL_NUM_THREADS"] = "4"
     os.environ["NUMEXPR_NUM_THREADS"] = "4"

@@ -4,13 +4,12 @@ from functools import partial
 from ray import tune
 
 from run_models.clf_templates import get_chP96_clf_2cond_conf
-from run_models.dae.tune_hyperparams import get_base_config
 from run_models.model_templates import assign_model_config, chp96_diffae_latent_training_conf, chp96_diffae_xor_conf, \
     chp96_diffae_latent_conf
 from src._types import LossType, ModelName, GenerativeType, NoiseType, Activation
 from src.config import ClfConfig, TorchInstanceConfig
 from src.models.trainer import Trainer
-from variables import DATA_DIR, MODEL_DIR
+from variables import MODEL_DIR, ROOT_DIR
 
 
 def main(config):
@@ -134,7 +133,7 @@ def base_model(conf):
 
 
 if __name__ == "__main__":
-    os.environ["CUDA_VISIBLE_DEVICES"] = "4"
+    os.environ["CUDA_VISIBLE_DEVICES"] = "7"
     os.environ["OMP_NUM_THREADS"] = "4"
     os.environ["MKL_NUM_THREADS"] = "4"
     os.environ["NUMEXPR_NUM_THREADS"] = "4"

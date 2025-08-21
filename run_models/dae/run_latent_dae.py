@@ -8,7 +8,8 @@ from run_models.model_templates import assign_model_config, chp96_diffae_latent_
 from src._types import LossType, ModelName, GenerativeType, NoiseType, Activation
 from src.config import ClfConfig, TorchInstanceConfig
 from src.models.trainer import Trainer
-from variables import DATA_DIR, MODEL_DIR
+from variables import MODEL_DIR, ROOT_DIR
+
 
 def main(config):
     conf = get_base_config_latent()
@@ -25,7 +26,7 @@ def main(config):
 
     # latent_diffusion conf id for cond
     conf.latent_diffusion_conf.loss_type = config["loss_type"]
-    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_best")
+    conf.checkpoint["name"] = os.path.join(MODEL_DIR, "tune_xor_base_20250710_215919_plus_dropout_cond_encoder_base_20250721_231432_best")
     conf.name = f"latent_5_alpha_{conf.model_conf.latent_net_conf.num_layers}_hidden{conf.model_conf.latent_net_conf.num_hid_channels}_loss{conf.latent_diffusion_conf.loss_type}"
     conf.latent_infer_path = config["latent_infer_path"]
     conf.create_checkpoint = False
@@ -58,9 +59,9 @@ def get_base_config_latent():
     conf.create_checkpoint = True
     conf.eval.eval_training_every_epoch = 100
     conf.eval.eval_epoch_metrics_val_samples = False
-    conf.checkpoint['dir'] = os.path.join(DATA_DIR, "final_models", "checkpoints")
-    conf.logging_dir = os.path.join(DATA_DIR, "final_models", "logging")
-    conf.run_dir = os.path.join(DATA_DIR, "final_models", "runs")
+    conf.checkpoint['dir'] = os.path.join(ROOT_DIR, "checkpoints")
+    conf.logging_dir = os.path.join(ROOT_DIR, "logging")
+    conf.run_dir = os.path.join(ROOT_DIR, "runs")
     conf.eval.num_samples = 2
     conf.eval.num_evals = 10
     conf.eval.num_reconstructions = 2

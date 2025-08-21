@@ -56,8 +56,8 @@ class ExperimentAutoencoder(unittest.TestCase):
         self.trainer = Trainer(self.conf)
 
         img, target, index = next(iter(self.trainer.dataloaders.get(Mode.train)))
-        img = img.to(self.trainer.conf.dtype)
-
+        img = img.to(self.trainer.conf.device, dtype=self.trainer.conf.dtype)
+        target = target.to(self.trainer.conf.device)
         sampled1 = self.trainer.get_wrapper_model().sample(target=torch.tensor([1], device=self.conf.device))
         sampled2 = self.trainer.get_wrapper_model().sample(target=torch.tensor([0], device=self.conf.device))
 

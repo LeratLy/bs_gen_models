@@ -23,6 +23,7 @@ class DiffusionTestCase(unittest.TestCase):
 
     def test_diffusion_gaussian(self):
         self.conf = chp96_diffae_gaussian_conf()
+        self.conf.eval.eval_training_every_epoch = -1
         self.conf.batch_size = 1
         self.conf.__post_init__()
         self.trainer = Trainer(self.conf)
@@ -30,6 +31,7 @@ class DiffusionTestCase(unittest.TestCase):
 
     def test_ddim_sample_loop_gaussian(self):
         self.conf = chp96_diffae_gaussian_conf()
+        self.conf.eval.eval_training_every_epoch = -1
         self.conf.batch_size = 1
         self.conf.__post_init__()
         self.trainer = Trainer(self.conf)
@@ -37,6 +39,7 @@ class DiffusionTestCase(unittest.TestCase):
 
     def test_diffusion_xor(self):
         self.conf = chp96_diffae_xor_conf()
+        self.conf.eval.eval_training_every_epoch = -1
         self.conf.batch_size = 1
         self.conf.__post_init__()
         self.trainer = Trainer(self.conf)
@@ -44,6 +47,7 @@ class DiffusionTestCase(unittest.TestCase):
 
     def test_ddim_sample_loop_xor(self):
         self.conf = chp96_diffae_xor_conf()
+        self.conf.eval.eval_training_every_epoch = -1
         self.conf.batch_size = 1
         self.conf.__post_init__()
         self.trainer = Trainer(self.conf)
